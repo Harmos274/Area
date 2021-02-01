@@ -1,0 +1,38 @@
+{
+  "name": "areapi",
+  "version": "1.0.0",
+  "description": "API for Area",
+  "main": "index.ts",
+  "scripts": {
+    "test": "test",
+    "start": "tsc-watch --onsuccess \"node index.js\"",
+    "build": "tsc --build tsconfig.json",
+    "lint": "eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EpitechIT2020/B-YEP-500-BDX-5-1-area-gaetan.morvan.git"
+  },
+  "author": "Areaa development team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EpitechIT2020/B-YEP-500-BDX-5-1-area-gaetan.morvan/issues"
+  },
+  "homepage": "https://github.com/EpitechIT2020/B-YEP-500-BDX-5-1-area-gaetan.morvan#readme",
+  "dependencies": {
+    "@types/express": "^4.17.9",
+    "@types/node": "^14.14.10",
+    "@types/pg": "^7.14.7",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "install": "^0.13.0",
+    "pg": "^8.5.1",
+    "tsc-watch": "^4.2.9",
+    "typescript": "^4.1.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.9.0",
+    "@typescript-eslint/parser": "^4.9.0",
+    "eslint": "^7.14.0"
+  }
+}

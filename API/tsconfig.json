@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "pretty": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true
+  },
+
+  "include": [
+    "index.ts",
+    "auth/**/*",
+    "receipt/**/*",
+    "purchase/**/*",
+    "shop/**/*",
+    "transaction/**/*",
+    "common/**/*",
+    "common/models/**/*"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
