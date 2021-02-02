@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    # front:
+    #     build:
+    #       context: front
+    #       args:
+    #         BACK_HOST: http://${BACK_HOST}:${BACK_PORT}
+    #     ports:
+    #         - ${FRONT_PORT}:80
+    #     restart: on-failure
+    #     networks:
+    #         - api-network
+
+    # api:
+    #     build: Dashboard
+    #     ports:
+    #         - ${BACK_PORT}:80
+    #     restart: on-failure
+    #     environment:
+    #         - DB_USER
+    #         - DB_PASSWORD
+    #         - DB_HOST
+    #     networks:
+    #         - db-network
+
+    db:
+        image: "postgres:alpine"
+        restart: on-failure
+        environment:
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+        ports:
+            - 5432:5432 
+        networks:
+            - db-network
+        volumes:
+            - ./schema.sql://docker-entrypoint-initdb.d/schema.sql
+            - db-data:/var/lib/postgresql/data
+
+networks:
+    db-network:
+    api-network:
+
+volumes:
+    db-data:
