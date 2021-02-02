@@ -18,6 +18,7 @@ export default class DbService implements IDbService {
     static query<T>(text: string, params: Array<string>, callback: (err: Error, result: QueryResult<T>) => void): void {
         return pgPool.query(text, params, callback)
     }
+
     static connect(): Promise<PoolClient> {
         return pgPool.connect()
     }

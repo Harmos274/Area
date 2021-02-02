@@ -5,5 +5,6 @@ export default class ErrorModel extends BaseModel {
         super(false)
         this.data = {message}
     }
-    data: {message: string}
+
+    data: { message: string }
 }

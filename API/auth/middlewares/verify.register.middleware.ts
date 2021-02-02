@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import {NextFunction, Request, Response} from 'express'
 import ErrorModel from '../../common/models/error.model'
 
 export default function hasRegisterValidFields(req: Request, res: Response<ErrorModel>, next: NextFunction): Response<ErrorModel> {
@@ -20,7 +20,7 @@ export default function hasRegisterValidFields(req: Request, res: Response<Error
         if (errors.length !== 0) {
             return res.status(400).send(new ErrorModel(errors.join(',')))
         } else {
-            next();
+            next()
         }
     } else {
         return res.status(400).send(new ErrorModel("Missing name, surname, mail and password fields"))

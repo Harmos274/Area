@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import {NextFunction, Request, Response} from 'express'
 import ErrorModel from '../../common/models/error.model'
 
 export default function hasLoginValidFields(req: Request, res: Response<ErrorModel>, next: NextFunction): Response<ErrorModel> {
@@ -6,7 +6,7 @@ export default function hasLoginValidFields(req: Request, res: Response<ErrorMod
 
     if (req.body) {
         if (!req.body.mail) {
-            errors.push('Missing username field');
+            errors.push('Missing mail field');
         }
         if (!req.body.password) {
             errors.push('Missing password field');
