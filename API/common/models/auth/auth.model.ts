@@ -1,9 +1,10 @@
-import BaseModel from "../base.model"
+import BaseModel from '../base.model'
 
 export default class AuthModel extends BaseModel {
     constructor(token: string) {
         super(true)
-        this.data = {token}
+        this.data = { token }
     }
-    data: {token: string}
+
+    data: { token: string }
 }

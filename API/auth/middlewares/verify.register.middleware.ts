@@ -1,21 +1,23 @@
-import {NextFunction, Request, Response} from 'express'
+import { NextFunction, Request, Response } from 'express'
 import ErrorModel from '../../common/models/error.model'
+import RegisterRequestModel from '../models/register.request.model'
 
-export default function hasRegisterValidFields(req: Request, res: Response<ErrorModel>, next: NextFunction): Response<ErrorModel> {
+export default function hasRegisterValidFields(
+    req: Request<unknown, unknown, RegisterRequestModel>,
+    res: Response<ErrorModel>,
+    next: NextFunction
+): Response<ErrorModel> {
     const errors: Array<string> = []
 
     if (req.body) {
-        if (!req.body.name) {
-            errors.push('Missing name field');
-        }
-        if (!req.body.surname) {
-            errors.push('Missing surname field');
-        }
         if (!req.body.mail) {
-            errors.push('Missing mail field');
+            errors.push('Missing name field')
+        }
+        if (!req.body.username) {
+            errors.push('Missing surname field')
         }
         if (!req.body.password) {
-            errors.push('Missing password field');
+            errors.push('Missing password field')
         }
         if (errors.length !== 0) {
             return res.status(400).send(new ErrorModel(errors.join(',')))
@@ -23,6 +25,6 @@ export default function hasRegisterValidFields(req: Request, res: Response<Error
             next()
         }
     } else {
-        return res.status(400).send(new ErrorModel("Missing name, surname, mail and password fields"))
+        return res.status(400).send(new ErrorModel('Missing name, surname, mail and password fields'))
     }
 }

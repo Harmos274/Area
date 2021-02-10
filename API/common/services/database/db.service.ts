@@ -1,6 +1,6 @@
-import {Pool, PoolClient, QueryResult} from 'pg'
-import Config from "../../config/env.config"
-import IDbService from "./db.service.interface"
+import { Pool, PoolClient, QueryResult } from 'pg'
+import Config from '../../config/env.config'
+import IDbService from './db.service.interface'
 
 const pgPool = new Pool({
     max: 20,
@@ -11,7 +11,7 @@ const pgPool = new Pool({
     port: Number(Config.database.port),
     database: Config.database.name,
     user: Config.database.user,
-    password: Config.database.password
+    password: Config.database.password,
 })
 
 export default class DbService implements IDbService {

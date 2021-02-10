@@ -21,8 +21,8 @@ app.use((req, res, next) => {
     } else {
         return next()
     }
-});
+})
 
 app.listen(Config.port, function () {
     console.log(`API listening at port ${Config.port}`)
-});
+})
