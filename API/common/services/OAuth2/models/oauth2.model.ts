@@ -27,7 +27,6 @@ function getClient(clientID: string, clientSecret: string): Promise<Client> {
 }
 
 function verifyScope(token: Token, scope: string | string[]): Promise<boolean> {
-    console.log('eeee')
     return new Promise<boolean>((resolve) => resolve(true))
 }
 
@@ -44,7 +43,6 @@ async function saveToken(accessToken: Token, client: Client, user: User): Promis
 
 async function getUser(username: string, password: string): Promise<User | Falsey> {
     try {
-        console.log('titi')
         return await DatabaseService.getUserFromCredentials(username, password)
     } catch {
         return false
@@ -53,7 +51,6 @@ async function getUser(username: string, password: string): Promise<User | False
 
 async function getAccessToken(accessToken: string): Promise<Token | Falsey> {
     try {
-        console.log('tutut')
         const user = await DatabaseService.getUserFromAccessToken(accessToken)
 
         return {
