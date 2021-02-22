@@ -45,7 +45,6 @@ On failure, every endpoint will return an object with a corespondant `HTTP/1.1` 
 
 Authentication endpoints use the [OAuth2](https://oauth.net/2/) standard.
 
-<br>
 
 ### `POST /oauth/register`
 
@@ -103,9 +102,8 @@ Http code: `201 Created`
 ---
 ## Reddit
 Area can be connected with your Reddit account in order to give you insights on your favorite comunities.
-<br>
 
-### `POST /reddit/link`
+### `PUT /reddit/link`
 
 Link Reddit account to an existing Area account in order to use the widgets.
 
@@ -123,48 +121,87 @@ body:
 }
 ```
 
+<br>
+
 ### `GET /reddit/profil`
 
 Get Reddit profile info.
 
-```
-Header:
+**Request:**
 
-Authorization: Bearer <TOKEN>
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "data": {
+        "SOMETHING": "SOMETHING"
+    },
+    "success": true
+}
 ```
+Http code: `200 OK`
 
 ### `GET /reddit/posts?sub=Y&nbr=X`
 
 Get lasts `X` Reddit posts from a subreddit `Y`.
 
-```
-Header:
+**Request:**
 
-Authorization: Bearer <TOKEN>
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "data": {
+        "SOMETHING": "SOMETHING"
+    },
+    "success": true
+}
 ```
+Http code: `200 OK`
 
 ### `GET /reddit/spotlights`
 
 Get actual Reddit spotlights.
 
-```
-Header:
+**Request:**
 
-Authorization: Bearer <TOKEN>
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "data": {
+        "SOMETHING": "SOMETHING"
+    },
+    "success": true
+}
 ```
+Http code: `200 OK`
 
 ---
 ## Spotify
 
-### `POST /spotify/link`
+### `PUT /spotify/link`
 
 Link Spotify to an existing Area account in order to use the widgets.
 
-```
-Header:
+**Request:**
 
-Authorization: Bearer <TOKEN>
-```
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
 
 body:
 ```json
@@ -177,11 +214,12 @@ body:
 
 Get Spotify trending.
 
-```
-Header:
+**Request:**
 
-Authorization: Bearer <TOKEN>
-```
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
 
 ### `GET /spotify/podcast?name=Y`
 
