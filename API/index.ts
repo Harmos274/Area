@@ -3,8 +3,10 @@ import * as express from 'express'
 import * as bodyParser from 'body-parser'
 
 import AuthenticationRouter from './auth/routes.config'
+import { Orm as orm } from './common/services/orm/orm.service'
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 // Add api endpoint
@@ -23,6 +25,15 @@ app.use((req, res, next) => {
     }
 })
 
-app.listen(Config.port, function () {
-    console.log(`API listening at port ${Config.port}`)
-})
+void (() => {
+    orm.authenticate()
+        .then(() => {
+            console.log('connected to orm')
+        })
+        .catch(() => {
+            throw new Error("Can't reach database")
+        })
+    app.listen(Config.port, function () {
+        console.log(`API listening at port ${Config.port}`)
+    })
+})()

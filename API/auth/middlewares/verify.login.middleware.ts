@@ -2,11 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import ErrorModel from '../../common/models/error.model'
 import LoginRequestModel from '../models/login.request.model'
 
-export default function hasLoginValidFields(
-    req: Request<unknown, unknown, LoginRequestModel>,
-    res: Response<ErrorModel>,
-    next: NextFunction
-): Response<ErrorModel> {
+type LoginRequest = Request<unknown, unknown, LoginRequestModel>
+
+export default function hasLoginValidFields(req: LoginRequest, res: Response<ErrorModel>, next: NextFunction): Response<ErrorModel> {
     const errors: Array<string> = []
 
     if (req.body) {
@@ -22,6 +20,6 @@ export default function hasLoginValidFields(
             next()
         }
     } else {
-        return res.status(400).send(new ErrorModel('Missing username and password fields'))
+        return res.status(400).send(new ErrorModel('Missing mail and password fields'))
     }
 }

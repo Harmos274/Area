@@ -2,11 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import ErrorModel from '../../common/models/error.model'
 import RegisterRequestModel from '../models/register.request.model'
 
-export default function hasRegisterValidFields(
-    req: Request<unknown, unknown, RegisterRequestModel>,
-    res: Response<ErrorModel>,
-    next: NextFunction
-): Response<ErrorModel> {
+type RegisterRequest = Request<unknown, unknown, RegisterRequestModel>
+
+export default function hasRegisterValidFields(req: RegisterRequest, res: Response<ErrorModel>, next: NextFunction): Response<ErrorModel> {
     const errors: Array<string> = []
 
     if (req.body) {
@@ -25,6 +23,6 @@ export default function hasRegisterValidFields(
             next()
         }
     } else {
-        return res.status(400).send(new ErrorModel('Missing name, surname, mail and password fields'))
+        return res.status(400).send(new ErrorModel('Missing mail, username and password fields'))
     }
 }

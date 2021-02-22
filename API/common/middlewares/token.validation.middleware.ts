@@ -1,26 +1,17 @@
 import { NextFunction, Request, Response } from 'express'
 import ErrorModel from '../../common/models/error.model'
+import { Request as ORequest, Response as OResponse } from 'oauth2-server'
+import oauth from '../services/OAuth2/oauth2.service'
 
-export default function validBearerToken(
-    req: Request,
-    res: Response<ErrorModel>,
-    next: NextFunction
-): Response<ErrorModel> | void {
-    if (req.headers['authorization']) {
-        try {
-            const authorization = req.headers['authorization'].toString().split(' ')
+export default async function validBearerToken(req: Request, res: Response<ErrorModel>, next: NextFunction): Promise<Response<ErrorModel>> {
+    const request = new ORequest(req)
+    const response = new OResponse(res)
 
-            if (authorization[0] !== 'Bearer') {
-                return res.status(401).send(new ErrorModel('Invalid authorization type'))
-            } else {
-                // code for bearer token validation here :)
-                // do not implement in Forward (no time lmao)
-                return next()
-            }
-        } catch (err: unknown) {
-            return res.status(403).send(new ErrorModel(`Invalid authorization : ${err.toString()}`))
-        }
-    } else {
-        return res.status(401).send(new ErrorModel('No authorization given'))
+    try {
+        const token = await oauth.authenticate(request, response)
+        res.locals.oauth = { token: token }
+        next()
+    } catch (err: unknown) {
+        return res.status(403).send(new ErrorModel(`Invalid authorization : ${err.toString()}`))
     }
 }

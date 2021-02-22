@@ -1,22 +1,20 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "sourceMap": true,
+    "target": "ES6",
+    "module": "CommonJS",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "pretty": true,
     "noImplicitAny": true,
     "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true
+    "preserveConstEnums": true
   },
 
   "include": [
     "index.ts",
     "auth/**/*",
-    "receipt/**/*",
-    "purchase/**/*",
-    "shop/**/*",
-    "transaction/**/*",
     "common/**/*",
-    "common/models/**/*"
   ],
 
   "exclude": [
