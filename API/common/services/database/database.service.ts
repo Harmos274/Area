@@ -7,6 +7,13 @@ export default class DatabaseService {
         return createHash('sha256').update(source).digest('hex')
     }
 
+    static async createUser(mail: string, username: string, password: string): Promise<Users> {
+        try {
+            return await Users.create({ name: username, mail: mail, password: this.crypt(password) })
+        } catch {
+            throw new DatabaseError("Can't create user")
+        }
+    }
     static async getUserFromCredentials(mail: string, password: string): Promise<Users> {
         try {
             return await Users.findOne({ where: { mail: mail, password: this.crypt(password) } })

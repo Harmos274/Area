@@ -20,7 +20,7 @@ function getClient(clientID: string, clientSecret: string): Promise<Client> {
         redirectUris: null,
         id: clientID,
     }
-    // there isn't any Areaplication ftm
+    // there isn't any Areaplication atm
     return new Promise<Client>((resolve) => {
         resolve(client)
     })

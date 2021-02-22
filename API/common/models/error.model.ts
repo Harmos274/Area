@@ -1,10 +1,13 @@
 import BaseModel from './base.model'
 
 export default class ErrorModel extends BaseModel {
-    constructor(message: string) {
+    constructor(source: string, message: string) {
         super(false)
-        this.data = { message }
+        this.data = { source, message }
     }
 
-    data: { message: string }
+    data: {
+        source: string
+        message: string
+    }
 }

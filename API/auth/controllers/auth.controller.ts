@@ -1,30 +1,37 @@
 import ErrorModel from '../../common/models/error.model'
-import BaseModel from '../../common/models/base.model'
-import AuthModel from '../../common/models/auth/auth.model'
 import { Response, Request } from 'express'
-import { Request as ORequest, Response as OResponse } from 'oauth2-server'
+import { Request as ORequest, Response as OResponse, Token } from 'oauth2-server'
 import oauth from '../../common/services/OAuth2/oauth2.service'
+import OauthResponseModel from '../models/oauth.response.model'
+import DatabaseService from '../../common/services/database/database.service'
+import RegisterRequestModel from '../models/register.request.model'
+import RegisterResponseModel from '../models/register.response.model'
+import BaseModel from '../../common/models/base.model'
 
-function generateToken(): string {
-    return 'qwerty'
+async function generateToken(req: Request<unknown, unknown, unknown>, res: Response): Promise<Token> {
+    const request = new ORequest(req)
+    const response = new OResponse(res)
+
+    return await oauth.token(request, response)
 }
 
-export async function login(req: Request, res: Response<BaseModel>): Promise<void> {
+export async function token(req: Request, res: Response<OauthResponseModel | ErrorModel>): Promise<void> {
     try {
-        const request = new ORequest(req)
-        const response = new OResponse(res)
-        const token = await oauth.token(request, response)
+        const token = await generateToken(req, res)
 
-        res.status(201).send(new AuthModel(token.accessToken))
+        res.status(201).send(new OauthResponseModel(token.accessToken, token.accessTokenExpiresAt))
     } catch (err: unknown) {
-        res.status(403).send(new ErrorModel(`Invalid login request : ${err.toString()}`))
+        res.status(404).send(new ErrorModel(req.url, `Invalid login request : ${err.toString()}`))
     }
 }
 
-export function register(req: Request, res: Response<BaseModel>): void {
+type RegisterRequest = Request<unknown, unknown, RegisterRequestModel>
+export async function register(req: RegisterRequest, res: Response<BaseModel>): Promise<void> {
     try {
-        res.status(201).send(new AuthModel(generateToken()))
+        await DatabaseService.createUser(req.body.mail, req.body.username, req.body.password)
+
+        res.status(201).send(new RegisterResponseModel())
     } catch (err: unknown) {
-        res.status(500).send(new ErrorModel(`Invalid register request : ${err.toString()}`))
+        res.status(500).send(new ErrorModel(req.url, `Invalid register request : ${err.toString()}`))
     }
 }
