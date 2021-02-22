@@ -15,7 +15,6 @@ export async function login(req: Request, res: Response<BaseModel>): Promise<voi
         const response = new OResponse(res)
         const token = await oauth.token(request, response)
 
-        console.log(token)
         res.status(201).send(new AuthModel(token.accessToken))
     } catch (err: unknown) {
         res.status(403).send(new ErrorModel(`Invalid login request : ${err.toString()}`))
