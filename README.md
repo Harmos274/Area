@@ -123,7 +123,7 @@ body:
 
 <br>
 
-### `GET /reddit/profil`
+### `GET /reddit/profile`
 
 Get Reddit profile info.
 
@@ -138,16 +138,21 @@ header:
 ```json
 {
     "data": {
-        "SOMETHING": "SOMETHING"
+        "name": "name",
+        "icon_url": "icon_url",
+        "awarder_karma": "awarder_karma",
+        "awardee_karma": "awardee_karma",
+        "link_karma": "link_karma",
+        "comment_karma": "comment_karma"
     },
     "success": true
 }
 ```
 Http code: `200 OK`
 
-### `GET /reddit/posts?sub=Y&nbr=X`
+### `GET /reddit/hots?sub=Y&nbr=X`
 
-Get lasts `X` Reddit posts from a subreddit `Y`.
+Get lasts `X` Reddit hot posts from a subreddit `Y`.
 
 **Request:**
 
@@ -159,9 +164,21 @@ header:
 **Response:**
 ```json
 {
-    "data": {
-        "SOMETHING": "SOMETHING"
-    },
+    "data": 
+    [
+        {
+            "author": "author",
+            "title": "title",
+            "selftext": "selftext",
+            "score": "score",
+            "ratio": "ratio",
+            "image": "image",
+            "thumbnail": "thumbnail"
+        },
+        {
+            "...":"..."
+        }
+    ],
     "success": true
 }
 ```
@@ -181,9 +198,19 @@ header:
 **Response:**
 ```json
 {
-    "data": {
-        "SOMETHING": "SOMETHING"
-    },
+    "data": 
+    [
+        {
+            "name": "subreddit name",
+            "description": "description",
+            "population": "population",
+            "icon_url": "icon_url",
+            "banner_url": "banner_url"
+        },
+        {
+            "...":"..."     
+        }
+    ],
     "success": true
 }
 ```
