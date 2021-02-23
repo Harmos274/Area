@@ -152,7 +152,7 @@ Http code: `200 OK`
 
 ### `GET /reddit/hots?sub=Y&nbr=X`
 
-Get lasts `X` Reddit hot posts from a subreddit `Y`.
+Get last `X` posts from subreddit `Y`.
 
 **Request:**
 
