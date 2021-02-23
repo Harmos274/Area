@@ -25,15 +25,13 @@ app.use((req, res, next) => {
     }
 })
 
-void (() => {
-    orm.authenticate()
-        .then(() => {
-            console.log('connected to orm')
-        })
-        .catch(() => {
-            throw new Error("Can't reach database")
-        })
-    app.listen(Config.port, function () {
-        console.log(`API listening at port ${Config.port}`)
+orm.authenticate()
+    .then(() => {
+        console.log('connected to orm')
     })
-})()
+    .catch(() => {
+        throw new Error("Can't reach database")
+    })
+app.listen(Config.port, function () {
+    console.log(`API listening at port ${Config.port}`)
+})
