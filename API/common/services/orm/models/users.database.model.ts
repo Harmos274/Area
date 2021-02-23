@@ -1,8 +1,8 @@
 import { AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript'
-import Services from './services.database.model'
+import Service from './services.database.model'
 
 @Table({ tableName: 'users', timestamps: false })
-export default class Users extends Model<Services> {
+export default class User extends Model<User> {
     @PrimaryKey
     @AutoIncrement
     @Column
@@ -17,15 +17,15 @@ export default class Users extends Model<Services> {
     @Column
     password!: string
 
-    @ForeignKey(() => Services)
+    @ForeignKey(() => Service)
     @Column
     twitter?: number
 
-    @ForeignKey(() => Services)
+    @ForeignKey(() => Service)
     @Column
     reddit?: number
 
-    @ForeignKey(() => Services)
+    @ForeignKey(() => Service)
     @Column
     spotify?: number
 

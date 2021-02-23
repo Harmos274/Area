@@ -1,7 +1,7 @@
 import { Column, Model, PrimaryKey, Table, Unique } from 'sequelize-typescript'
 
 @Table({ tableName: 'services', timestamps: false })
-export default abstract class Services extends Model<Services> {
+export default abstract class Service extends Model<Service> {
     @PrimaryKey
     @Unique
     @Column
