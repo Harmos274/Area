@@ -1,8 +1,12 @@
-export default class OauthResponseModel {
+import BaseModel from '../../common/models/base.model'
+
+export default class OauthResponseModel extends BaseModel {
     constructor(accessToken: string, accessTokenExpiresAt: Date) {
-        this.accessToken = accessToken
-        this.accessTokenExpiresAt = accessTokenExpiresAt
+        super(true)
+        this.data = { access_token: accessToken, access_token_expires_at: accessTokenExpiresAt }
     }
-    accessToken: string
-    accessTokenExpiresAt: Date
+    data: {
+        access_token: string
+        access_token_expires_at: Date
+    }
 }
