@@ -2,6 +2,7 @@ import User from '../orm/models/users.database.model'
 import { createHash } from 'crypto'
 import { ValidationError } from 'sequelize'
 import DatabaseError from './models/database.error.model'
+import Service from '../orm/models/services.database.model'
 
 export default class DatabaseService {
     private static crypt(source: string): string {
@@ -29,12 +30,42 @@ export default class DatabaseService {
     }
 
     static async getUserFromAccessToken(token: string): Promise<User> {
-        const user = await User.findOne({ where: { token: token } })
+        const user = await User.findOne({ where: { token: token }, include: [{ all: true }] })
 
         if (!user) {
             throw new DatabaseError("Can't find user")
         }
         return user
+    }
+
+    static async saveServiceAccessToken(
+        serviceName: 'reddit' | 'spotify' | 'twitter',
+        user: User,
+        serviceToken: string,
+        serviceRefreshToken: string
+    ): Promise<User> {
+        try {
+            if (!user[serviceName]) {
+                const service = await Service.create({
+                    token: serviceToken,
+                    refresh_token: serviceRefreshToken,
+                    enabled: true,
+                })
+                await user.$set('reddit', service.service_id)
+            } else {
+                user[serviceName].token = serviceToken
+                user[serviceName].refresh_token = serviceRefreshToken
+                user[serviceName].enabled = true
+                await user[serviceName].save()
+            }
+            await user.save()
+            return user
+        } catch (e: unknown) {
+            if (e instanceof ValidationError) {
+                throw new DatabaseError("Can't write on database")
+            }
+            throw new DatabaseError(`Unknown error : ${e.toString()}`)
+        }
     }
 
     static async saveAccessToken(token: string, expiration: Date, userId: number): Promise<string> {
@@ -48,6 +79,18 @@ export default class DatabaseService {
             user.token_expire_date = expiration
             await user.save()
             return token
+        } catch (e: unknown) {
+            if (e instanceof ValidationError) {
+                throw new DatabaseError("Can't write on database")
+            }
+            throw new DatabaseError(`Unknown error : ${e.toString()}`)
+        }
+    }
+
+    static async disableService(serviceName: 'reddit' | 'spotify' | 'twitter', user: User): Promise<void> {
+        try {
+            user[serviceName].enabled = false
+            await user[serviceName].save()
         } catch (e: unknown) {
             if (e instanceof ValidationError) {
                 throw new DatabaseError("Can't write on database")

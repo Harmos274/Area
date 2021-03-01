@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/EpitechIT2020/B-YEP-500-BDX-5-1-area-gaetan.morvan#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",

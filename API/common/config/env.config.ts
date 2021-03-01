@@ -1,5 +1,6 @@
 export default class Config {
     static port = 5000
+    static version = process.env.AREA_VERSION
     static database = {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
