@@ -42,19 +42,22 @@ export default class DatabaseService {
         serviceName: 'reddit' | 'spotify' | 'twitter',
         user: User,
         serviceToken: string,
-        serviceRefreshToken: string
+        serviceRefreshToken: string,
+        serviceTokenExpireDate: Date
     ): Promise<User> {
         try {
             if (!user[serviceName]) {
                 const service = await Service.create({
                     token: serviceToken,
                     refresh_token: serviceRefreshToken,
+                    token_expire_date: serviceTokenExpireDate,
                     enabled: true,
                 })
                 await user.$set('reddit', service.service_id)
             } else {
                 user[serviceName].token = serviceToken
                 user[serviceName].refresh_token = serviceRefreshToken
+                user[serviceName].token_expire_date = serviceTokenExpireDate
                 user[serviceName].enabled = true
                 await user[serviceName].save()
             }
