@@ -36,7 +36,7 @@ export default class RedditService {
         const body = new URLSearchParams()
         body.append('grant_type', 'authorization_code')
         body.append('code', code)
-        body.append('redirect_uri', 'http://localhost:8080/callbacks/reddit')
+        body.append('redirect_uri', RedditConfig.reddit_redirect_uri)
 
         try {
             res = await instance.post<RedditAccessTokenResponse>('https://www.reddit.com/api/v1/access_token', body, { headers: headers })
