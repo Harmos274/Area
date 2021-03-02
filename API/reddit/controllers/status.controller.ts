@@ -14,7 +14,7 @@ export async function link(req: Request<unknown, unknown, TokenLinkRequestModel>
         const user = res.locals.oauth.user as User
         const service = await RedditService.fromAccessCode(req.body.access_code)
 
-        await DatabaseService.saveServiceAccessToken('reddit', user, service.access_token, service.refresh_token)
+        await DatabaseService.saveServiceAccessToken('reddit', user, service.access_token, service.refresh_token, service.expire_date)
         res.status(200).send(new LinkResponseModel())
     } catch (e: unknown) {
         res.status(403).send(new ErrorModel(req.url, `Reddit : ${e.toString()}`))
