@@ -4,6 +4,8 @@ import { ValidationError } from 'sequelize'
 import DatabaseError from './models/database.error.model'
 import Service from '../orm/models/services.database.model'
 
+export type ServiceType = 'reddit' | 'spotify' | 'twitter'
+
 export default class DatabaseService {
     private static crypt(source: string): string {
         return createHash('sha256').update(source).digest('hex')
@@ -39,14 +41,14 @@ export default class DatabaseService {
     }
 
     static async saveServiceAccessToken(
-        serviceName: 'reddit' | 'spotify' | 'twitter',
+        serviceType: ServiceType,
         user: User,
         serviceToken: string,
         serviceRefreshToken: string,
         serviceTokenExpireDate: Date
     ): Promise<User> {
         try {
-            if (!user[serviceName]) {
+            if (!user[serviceType]) {
                 const service = await Service.create({
                     token: serviceToken,
                     refresh_token: serviceRefreshToken,
@@ -55,11 +57,11 @@ export default class DatabaseService {
                 })
                 await user.$set('reddit', service.service_id)
             } else {
-                user[serviceName].token = serviceToken
-                user[serviceName].refresh_token = serviceRefreshToken
-                user[serviceName].token_expire_date = serviceTokenExpireDate
-                user[serviceName].enabled = true
-                await user[serviceName].save()
+                user[serviceType].token = serviceToken
+                user[serviceType].refresh_token = serviceRefreshToken
+                user[serviceType].token_expire_date = serviceTokenExpireDate
+                user[serviceType].enabled = true
+                await user[serviceType].save()
             }
             await user.save()
             return user
@@ -90,10 +92,10 @@ export default class DatabaseService {
         }
     }
 
-    static async disableService(serviceName: 'reddit' | 'spotify' | 'twitter', user: User): Promise<void> {
+    static async disableService(serviceType: ServiceType, user: User): Promise<void> {
         try {
-            user[serviceName].enabled = false
-            await user[serviceName].save()
+            user[serviceType].enabled = false
+            await user[serviceType].save()
         } catch (e: unknown) {
             if (e instanceof ValidationError) {
                 throw new DatabaseError("Can't write on database")
