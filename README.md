@@ -9,8 +9,14 @@ Full information on API services can be obtained with the following endpoint :
 
 ### `GET /about.json`
 
+Return informations about the API. If no or invalid `token` is provided the only activated services will be `register` and `token`.
+
 **Request:**
-No body or specific header required.
+
+optional header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
 
 **Response:**
 ```json
@@ -18,6 +24,7 @@ No body or specific header required.
     "object": "object"
 }
 ```
+Http code: `200 OK`
 
 ---
 ## Default Behaviour
@@ -33,8 +40,8 @@ On failure, every endpoint will return an object with a corespondant `HTTP/1.1` 
 ```json
 {
     "data": {
-        "source": "<endpoint>",
-        "message": "<message>"
+        "source": "string",
+        "message": "string"
     },
     "success": false
 }
@@ -55,9 +62,9 @@ Create an Area account.
 body:
 ```json
 {
-    "email": "mail",
-    "username": "username",
-    "password": "password"
+    "email": "string",
+    "username": "string",
+    "password": "string"
 }
 ```
 
@@ -92,8 +99,11 @@ grant_type=password&username=username&password=password
 **Response:**
 ```json
 {
-    "accessToken": "token",
-    "accessTokenExpiresAt": "date"
+    "data": {
+        "access_token": "string",
+        "access_token_expires_at": "date_string"
+    },
+    "success": true
 }
 ```
 Http code: `201 Created`
@@ -117,11 +127,64 @@ header:
 body:
 ```json
 {
-    "access_code": "code"
+    "access_code": "string"
 }
 ```
+**Response:**
+```json
+{
+    "success": true
+}
+```
+Http code: `201 Created`
 
 <br>
+
+### `PUT /reddit/unlink`
+
+Link Reddit account to an existing Area account in order to use the widgets.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "success": true
+}
+```
+Http code: `200 OK`
+
+<br>
+
+### `PUT /reddit/status`
+
+Link Reddit account to an existing Area account in order to use the widgets.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "data": {
+        "logged_in": "boolean",
+    },
+    "success": true
+}
+```
+Http code: `200 OK`
+
+<br>
+
 
 ### `GET /reddit/profile`
 
@@ -138,17 +201,19 @@ header:
 ```json
 {
     "data": {
-        "name": "name",
-        "icon_url": "icon_url",
-        "awarder_karma": "awarder_karma",
-        "awardee_karma": "awardee_karma",
-        "link_karma": "link_karma",
-        "comment_karma": "comment_karma"
+        "name": "string",
+        "icon_url": "string",
+        "awarder_karma": "number",
+        "awardee_karma": "number",
+        "link_karma": "number",
+        "comment_karma": "number"
     },
     "success": true
 }
 ```
 Http code: `200 OK`
+
+<br>
 
 ### `GET /reddit/hots?sub=Y&nbr=X`
 
@@ -167,13 +232,14 @@ header:
     "data": 
     [
         {
-            "author": "author",
-            "title": "title",
-            "selftext": "selftext",
-            "score": "score",
-            "ratio": "ratio",
-            "image": "image",
-            "thumbnail": "thumbnail"
+            "author": "string",
+            "title": "string",
+            "selftext": "string",
+            "score": "number",
+            "ratio": "number",
+            "image": "string",
+            "thumbnail": "string",
+            "pinned": "boolean"
         },
         {
             "...":"..."
@@ -183,6 +249,8 @@ header:
 }
 ```
 Http code: `200 OK`
+
+<br>
 
 ### `GET /reddit/spotlights`
 
@@ -201,14 +269,14 @@ header:
     "data": 
     [
         {
-            "name": "subreddit name",
-            "description": "description",
-            "population": "population",
-            "icon_url": "icon_url",
-            "banner_url": "banner_url"
+            "name": "string",
+            "description": "string",
+            "population": "number",
+            "icon_url": "string",
+            "banner_url": "string"
         },
         {
-            "...":"..."     
+            "...":"..."
         }
     ],
     "success": true
@@ -237,6 +305,8 @@ body:
 }
 ```
 
+<br>
+
 ### `GET /spotify/trendings`
 
 Get Spotify trending.
@@ -255,3 +325,127 @@ header:
 ### `GET /spotify/song?name=Y`
 
 ### `GET /spotify/artist?name=Y`
+
+---
+## Widget
+
+### `GET /widget/list`
+
+Show the enabled widgets of the user. On response type, every fields in `config` field are optional.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+
+```json
+{
+    "data": 
+    [
+        {
+            "id": "number",
+            "type": {
+                "name": "string",
+                "configurable": "boolean"
+            },
+            "config": {
+                "name": "string?",
+                "number": "number?",
+                "refresh": "number?"
+            }
+        },
+        {
+            "...": "..."    
+        }
+    ],
+    "success": true
+}
+```
+Http code: `200 OK`
+
+<br>
+
+### `POST /widget`
+
+Save a widget to a user account. Every fields in `config` field are optional.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+body:
+```json
+{
+    "data": 
+    {
+        "type_name": "string",
+        "config": {
+            "name": "string?",
+            "number": "number?",
+            "refresh": "number?"
+        }
+    },
+    "success": true
+}
+```
+
+**Response:**
+```json
+{
+    "data": {
+        "widget_id": "number"
+    },
+    "success": true
+}
+```
+Http code: `201 Created`
+
+<br>
+
+### `PATCH /widget/:widget_id`
+
+Update a widget's configuration already saved to a user account.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+**Response:**
+```json
+{
+    "success": true
+}
+```
+Http code: `200 OK`
+
+<br>
+
+### `DELETE /widget/:widget_id`
+
+Delete a widget from a user account.
+
+**Request:**
+
+header:
+| Key           | Value          |
+|---------------|----------------|
+| Authorization | Bearer `token` |
+
+
+**Response:**
+```json
+{
+    "success": true
+}
+```
+Http code: `200 OK`
