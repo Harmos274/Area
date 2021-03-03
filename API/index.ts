@@ -3,6 +3,7 @@ import * as express from 'express'
 import * as bodyParser from 'body-parser'
 
 import AuthenticationRouter from './auth/routes.config'
+import RedditRouter from './reddit/routes.config'
 import { Orm as orm } from './common/services/orm/orm.service'
 
 const app = express()
@@ -11,7 +12,9 @@ app.use(bodyParser.json())
 
 // Add api endpoint
 AuthenticationRouter(app)
+RedditRouter(app)
 
+// Cors config
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     res.header('Access-Control-Allow-Credentials', 'true')

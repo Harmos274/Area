@@ -33,6 +33,7 @@ function verifyScope(token: Token, scope: string | string[]): Promise<boolean> {
 async function saveToken(accessToken: Token, client: Client, user: User): Promise<Token | Falsey> {
     try {
         await DatabaseService.saveAccessToken(accessToken.accessToken, accessToken.accessTokenExpiresAt, user.id)
+
         accessToken.client = client
         accessToken.user = user
         return accessToken
@@ -56,7 +57,8 @@ async function getAccessToken(accessToken: string): Promise<Token | Falsey> {
         return {
             client: { id: user.id.toString(), grants: ['password'] },
             user: user,
-            accessToken: accessToken,
+            accessToken: user.token,
+            accessTokenExpiresAt: new Date(user.token_expire_date),
         }
     } catch {
         return false

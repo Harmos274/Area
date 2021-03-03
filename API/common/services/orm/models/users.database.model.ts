@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, ForeignKey, Model, PrimaryKey, Table } from 'sequelize-typescript'
+import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasOne, Model, PrimaryKey, Table } from 'sequelize-typescript'
 import Service from './services.database.model'
 
 @Table({ tableName: 'users', timestamps: false })
@@ -17,21 +17,18 @@ export default class User extends Model<User> {
     @Column
     password!: string
 
-    @ForeignKey(() => Service)
-    @Column
-    twitter?: number
+    @BelongsTo(() => Service, 'twitter_id')
+    twitter?: Service
 
-    @ForeignKey(() => Service)
-    @Column
-    reddit?: number
+    @BelongsTo(() => Service, 'reddit_id')
+    reddit?: Service
 
-    @ForeignKey(() => Service)
-    @Column
-    spotify?: number
+    @BelongsTo(() => Service, 'spotify_id')
+    spotify?: Service
 
     @Column
     token?: string
 
-    @Column
+    @Column(DataType.DATE)
     token_expire_date?: Date
 }

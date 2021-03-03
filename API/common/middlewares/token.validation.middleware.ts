@@ -8,10 +8,9 @@ export default async function validBearerToken(req: Request, res: Response<Error
     const response = new OResponse(res)
 
     try {
-        const token = await oauth.authenticate(request, response)
-        res.locals.oauth = { token: token }
+        res.locals.oauth = await oauth.authenticate(request, response)
         next()
     } catch (err: unknown) {
-        return res.status(401).send(new ErrorModel(req.url, `Invalid authorization : ${err.toString()}`))
+        return res.status(401).send(new ErrorModel(req.url, `Invalid authorization :${err.toString()}`))
     }
 }

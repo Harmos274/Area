@@ -1,9 +1,9 @@
-import { Column, Model, PrimaryKey, Table, Unique } from 'sequelize-typescript'
+import { AutoIncrement, Column, Model, PrimaryKey, Table, HasMany, DataType } from 'sequelize-typescript'
 
 @Table({ tableName: 'services', timestamps: false })
-export default abstract class Service extends Model<Service> {
+export default class Service extends Model<Service> {
     @PrimaryKey
-    @Unique
+    @AutoIncrement
     @Column
     service_id!: number
 
@@ -15,4 +15,7 @@ export default abstract class Service extends Model<Service> {
 
     @Column
     enabled!: boolean
+
+    @Column(DataType.DATE)
+    token_expire_date?: Date
 }

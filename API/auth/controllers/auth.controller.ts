@@ -32,6 +32,6 @@ export async function register(req: RegisterRequest, res: Response<BaseModel>): 
 
         res.status(201).send(new RegisterResponseModel())
     } catch (err: unknown) {
-        res.status(500).send(new ErrorModel(req.url, `Invalid register request : ${err.toString()}`))
+        res.status(409).send(new ErrorModel(req.url, `Invalid register request : ${err.toString()}`))
     }
 }

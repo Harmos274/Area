@@ -2,8 +2,9 @@
 API for AREA, fueled by Node JS and Typescript
 
 ### Launch
-In order to connect to the postgre db you have to set `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` 
-environment variables before starting the API.
+For compliance, set `AREA_VERSION` environment variable. In order to connect to the postgre db you have to set `DB_HOST`, 
+`DB_PORT`, `DB_USER`, `DB_PASSWORD`. 
+For Reddit service `REDDIT_CLIENT_ID`, `REDDIT_CLIENT_SECRET`. `REDDIT_REDIRECT_URI`
 
 ```shell script
 > npm install
