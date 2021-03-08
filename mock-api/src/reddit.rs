@@ -80,7 +80,7 @@ struct ProfileResponse {
 async fn hots(
     data: web::Data<AppData>,
     auth: BearerAuth,
-    params: web::Path<HotsParameters>,
+    params: web::Query<HotsParameters>,
 ) -> Response<Vec<HotPost>> {
     data.map_to_user(auth.token(), |_| Response::ok(hots_response(params.nbr)))
 }
@@ -89,28 +89,27 @@ async fn hots(
 #[derive(Deserialize)]
 struct HotsParameters {
     sub: String,
-    nbr: u64,
+    nbr: usize,
 }
 
-fn hots_response(nbr: u64) -> Vec<HotPost> {
-    let pos = 0;
+fn hots_response(nbr: usize) -> Vec<HotPost> {
+    let mut pos = 0;
 
     std::iter::from_fn(move || {
-        if pos < nbr {
-            Some(HotPost {
-                author: format!("author_{}", nbr),
-                title: format!("Post {}", nbr),
-                selftext: format!("Post {} selftext", nbr),
-                score: 42000,
-                ratio: 0.8,
-                image: "".to_string(),
-                thumbnail: "".to_string(),
-                pinned: false,
-            })
-        } else {
-            None
-        }
-    })
+        let nbr = pos;
+        pos += 1;
+
+        Some(HotPost {
+            author: format!("author_{}", nbr),
+            title: format!("Post {}", nbr),
+            selftext: format!("Post {} selftext", nbr),
+            score: 42000,
+            ratio: 0.8,
+            image: "https://i.redd.it/rq36kl1xjxr01.png".to_string(),
+            thumbnail: "https://www.reddit.com/favicon.ico".to_string(),
+            pinned: false,
+        })
+    }).take(nbr)
     .collect()
 }
 

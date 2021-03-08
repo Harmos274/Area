@@ -66,7 +66,7 @@ pub struct WidgetType {
 #[derive(Clone, Serialize, Deserialize)]
 pub struct WidgetConfig {
     pub name: Option<String>,
-    pub number: Option<String>,
+    pub number: Option<i64>,
     pub refresh: Option<u64>,
 }
 

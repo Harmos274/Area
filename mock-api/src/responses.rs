@@ -84,7 +84,7 @@ where
         let success = self.code.is_success();
         let uri = req.uri();
 
-        println!("Responding from {}", uri);
+        println!("Responding from {} {}", req.method(), uri);
 
         let body = match self.data {
             Ok(data) => serde_json::to_string(&ResponseModel { success, data }),

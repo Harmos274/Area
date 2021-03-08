@@ -20,7 +20,7 @@ async fn get(data: web::Data<AppData>, auth: BearerAuth) -> Response<Vec<Widget>
     data.map_to_user(auth.token(), |user| Response::ok(user.widgets.clone()))
 }
 
-#[post("/add")]
+#[post("")]
 async fn add(
     data: web::Data<AppData>,
     auth: BearerAuth,
