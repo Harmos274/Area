@@ -1,8 +1,10 @@
-import Vue, { VueConstructor } from 'vue'
+import { VueConstructor } from 'vue'
 import Profile from '@/components/widgets/reddit/Profile.vue'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
+import Hots from '@/components/widgets/reddit/Hots.vue'
+import HotsConfig from '@/components/widgets/reddit/HotsConfig.vue'
 
-export type WidgetName = 'reddit_profile'
+export type WidgetName = 'reddit_profile' | 'reddit_hots'
 
 export interface WidgetConfig {
   name?: string;
@@ -20,13 +22,14 @@ export interface Widget {
 }
 
 export interface WidgetConstructor {
-  constructor: VueConstructor<Vue>;
+  constructor: VueConstructor;
   config: WidgetConfig;
   id: number;
 }
 
 const widgets = {
   reddit_profile: { constructor: Profile, configurable: false, configWidget: ProfileConfig },
+  reddit_hots: { constructor: Hots, configurable: true, configWidget: HotsConfig },
 }
 
 export function getWidgetConstructor (widget: Widget): WidgetConstructor | undefined {

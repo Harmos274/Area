@@ -1,6 +1,8 @@
 import { baseSelfUrl } from '@/definitions'
 import { unlinkReddit } from '@/api'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
+import HotsConfig from '@/components/widgets/reddit/HotsConfig.vue'
+import { ServiceDescription } from '@/service'
 
 const client = {
   id: 'sKKnWraYCh8LoQ',
@@ -23,13 +25,16 @@ export function getUrl (): URL {
   return authUrl
 }
 
-export const RedditService = {
+export const RedditService: ServiceDescription = {
   headerSrcLight: require('@/assets/Reddit_Lockup_OnWhite.png'),
   headerSrcDark: require('@/assets/Reddit_Lockup_OnDark.png'),
   brandColor: '#FF4500',
   authUrlMethod: getUrl,
   unLink: unlinkReddit,
-  widgets: [{ description: 'Profile', creationDialog: ProfileConfig }],
+  widgets: [
+    { description: 'Profile', creationDialog: ProfileConfig },
+    { description: 'Subreddit', creationDialog: HotsConfig },
+  ],
 }
 
 export interface RedditAccountInfo {
@@ -41,6 +46,18 @@ export interface RedditAccountInfo {
   comment_karma: number;
 }
 
+export interface PostData {
+  author: string;
+  title: string;
+  selftext: string;
+  score: number;
+  ratio: number;
+  image: string;
+  thumbnail: string;
+  pinned: boolean;
+}
+
 export interface RedditState {
   accountInfo?: RedditAccountInfo;
+  subredditsHots: Map<string, PostData[]>;
 }

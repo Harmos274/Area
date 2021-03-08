@@ -12,7 +12,7 @@
     <v-divider role="presentation" class="mx-2" />
 
     <v-card-text>
-      <v-container>
+      <v-container class="grow">
         <v-row v-for="[index, widget] in service.widgets.entries()" v-bind:key="index" align="center">
           <div> {{ widget.description }} </div>
 
@@ -82,7 +82,7 @@ export default class Service extends Vue {
   addWidget!: (name: string) => void;
 
   private dialog = false
-  private dialogWidget: VueConstructor<Vue> = Empty
+  private dialogWidget: VueConstructor = Empty
 
   private confirmDialog (name: WidgetName, config: WidgetConfig): void {
     addWidget(name, config)

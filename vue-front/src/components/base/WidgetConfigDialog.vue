@@ -7,7 +7,11 @@
     </v-card-text>
     <v-card-actions>
       <v-spacer />
-      <v-btn text @click="$emit('done', name, config)">{{ buttonText }}</v-btn>
+      <v-btn
+        :disabled="!validator()"
+        text
+        @click="$emit('done')"
+      >{{ buttonText }}</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -15,11 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { Widget, WidgetConfig, WidgetName } from '@/store/widgets'
-
-function defaultConfig (): WidgetConfig {
-  return {}
-}
+import { Widget } from '@/store/widgets'
 
 @Component
 export default class WidgetConfigDialog extends Vue {
@@ -32,12 +32,9 @@ export default class WidgetConfigDialog extends Vue {
   description!: string
 
   @Prop({ required: true })
-  name!: WidgetName
-
-  @Prop({ required: false, default: defaultConfig })
-  config!: WidgetConfig
-
-  @Prop({ required: true })
   buttonText!: string
+
+  @Prop({ required: false, default: () => () => true })
+  validator!: () => boolean
 }
 </script>

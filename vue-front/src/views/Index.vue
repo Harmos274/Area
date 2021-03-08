@@ -25,7 +25,6 @@ import AppDrawer from '@/components/core/AppDrawer.vue'
 
 export default class Index extends Vue {
   setDarkTheme!: (theme: boolean) => void;
-  drawer = true
 
   created () {
     loadApp()

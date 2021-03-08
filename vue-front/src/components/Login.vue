@@ -79,7 +79,7 @@ export default class Login extends Vue {
       const ret = await login(this.username, this.password)
 
       if (ret === LoginState.Success) {
-        this.$router.replace({ name: 'Home' })
+        await this.$router.replace({ name: 'Home' })
       }
     }
   }

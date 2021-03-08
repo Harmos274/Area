@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import store from '@/store'
+import store, { defaultRedditState } from '@/store'
 import { getWidget, WidgetConfig, WidgetName } from '@/store/widgets'
 import router from '@/router'
 
@@ -38,7 +38,7 @@ function handleError (response: ErrorResponse): void {
   if (response.status === 401) {
     store.commit('setAreaState', 'LoggedOut')
 
-    if (router.currentRoute.name === 'Login') {
+    if (router.currentRoute.name !== 'Login') {
       router.replace({ name: 'Login' })
     }
   }
@@ -46,7 +46,7 @@ function handleError (response: ErrorResponse): void {
 
 function handleErrorReddit (response: ErrorResponse): void {
   if (response.status === 403) {
-    store.commit('setRedditState', {})
+    store.commit('setRedditState', defaultRedditState())
   }
 
   handleError(response)
@@ -126,7 +126,7 @@ export function linkReddit (code: string): void {
     store.commit('setRedditState', 'Loading')
 
     axios.post('/reddit/link', { code }, config)
-      .then(() => store.commit('setRedditState', {}))
+      .then(() => store.commit('setRedditState', defaultRedditState()))
       .catch(handleErrorReddit)
   }
 }
@@ -160,7 +160,7 @@ export function statusReddit (): void {
         const status = response.data as StatusResponse
 
         if (status.logged_in) {
-          store.commit('setRedditState', {})
+          store.commit('setRedditState', defaultRedditState())
         } else {
           store.commit('setRedditState', 'LoggedOut')
         }
@@ -178,6 +178,16 @@ export function profileReddit (): void {
   if (config) {
     axios.get('/reddit/profile', config)
       .then(response => store.commit('setRedditProfile', response.data))
+      .catch(handleErrorReddit)
+  }
+}
+
+export function getSubredditHots (subreddit: string, nbr: number): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get(`/reddit/hots?sub=${subreddit}&nbr=${nbr}`, config)
+      .then(response => store.commit('setSubredditHots', { subreddit, hots: response.data }))
       .catch(handleErrorReddit)
   }
 }
@@ -242,7 +252,7 @@ export function addWidget (type_name: WidgetName, config: WidgetConfig): void {
   const widget = { type_name, config }
 
   if (axios_config) {
-    axios.post('/widget/add', widget, axios_config)
+    axios.post('/widget', widget, axios_config)
       .then(response => store.commit('addWidget', getWidget(response.data.widget_id, type_name, config)))
       .catch(handleError)
   }
@@ -265,6 +275,18 @@ export function removeWidget (id: number): void {
     axios.delete(`/widget/${id}`, config)
       .then(() => store.commit('removeWidget', id))
       .catch(handleError)
+  }
+}
+
+export async function setWidgetConfig (id: number, config: WidgetConfig): Promise<void> {
+  const axiosConfig = getAuthConfig()
+
+  if (config) {
+    return axios.patch(`/widget/${id}`, config, axiosConfig)
+      .then(() => store.commit('configWidget', { id, config }))
+      .catch(handleError)
+  } else {
+    return new Promise(resolve => resolve())
   }
 }
 

@@ -5,23 +5,24 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { mapMutations } from 'vuex'
 import store from '@/store'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'App',
-
+@Component({
   methods: {
     ...mapMutations(['setDarkTheme']),
   },
+})
+export default class App extends Vue {
+  setDarkTheme!: (theme: boolean) => void
 
   created () {
     this.$vuetify.theme.dark = store.state.darkTheme
-  },
+  }
 
   updated () {
     this.setDarkTheme(this.$vuetify.theme.dark)
-  },
-})
+  }
+}
 </script>

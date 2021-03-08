@@ -1,13 +1,17 @@
 <template>
-  <v-container v-if="widgets.length != 0">
-    <v-row>
-      <v-col>
+  <v-container v-if="widgets.length !== 0">
+    <v-row justify="center">
+      <v-col
+        v-for="widget in widgets"
+        v-bind:key="widget.id"
+        xl="4"
+        sm="6"
+        cols="12"
+      >
         <component
-          v-for="widget in widgets"
-          :is="widget.constructor"
-          v-bind:key="widget.id"
           :config="widget.config"
           :id="widget.id"
+          :is="widget.constructor"
         />
       </v-col>
     </v-row>

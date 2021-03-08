@@ -5,7 +5,7 @@
         v-for="[index, service] in services.entries()"
         v-bind:key="index"
         md="4"
-        sm="8"
+        sm="6"
         cols="12"
       >
         <service :service="service.desc" :status="service.status" />

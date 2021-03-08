@@ -5,12 +5,22 @@
     :refresh-timer="config.refresh"
     :update-function="update"
     :configWidget="configWidget"
+    :config="config"
   >
-    <template>
-      <v-list>
-        <v-list-item>{{ content.name }}'s profile</v-list-item>
-      </v-list>
+    <template v-slot:title>
+      {{ title }}
+      <v-spacer />
+      <v-avatar size="32px"><v-img :src="content.icon_url" /></v-avatar>
     </template>
+    <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>{{ content.comment_karma }} comment karma</v-list-item-title>
+          <v-list-item-title>{{ content.link_karma }} link karma</v-list-item-title>
+          <v-list-item-title>{{ content.comment_karma + content.link_karma }} total karma</v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </widget>
 </template>
 
@@ -44,6 +54,10 @@ export default class Profile extends Vue {
   }
 
   private configWidget = ProfileConfig
+
+  private get title (): string {
+    return `${this.content.name}'s profile`
+  }
 
   private get content (): RedditAccountInfo {
     const state = this.redditProfile

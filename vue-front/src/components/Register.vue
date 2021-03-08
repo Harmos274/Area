@@ -91,7 +91,7 @@ export default class Register extends Vue {
       this.state = await register(this.login, this.username, this.password1)
 
       if (this.state === RegistrationState.Success) {
-        this.$router.replace({ name: 'Login' })
+        await this.$router.replace({ name: 'Login' })
       }
     }
   }

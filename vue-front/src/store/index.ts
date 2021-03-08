@@ -1,8 +1,8 @@
 import Vue, { VueConstructor } from 'vue'
 import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist'
-import { Widget, WidgetConstructor, getWidgetConstructor } from '@/store/widgets'
-import { RedditState, RedditAccountInfo } from '@/reddit'
+import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@/store/widgets'
+import { RedditState, RedditAccountInfo, PostData } from '@/reddit'
 
 Vue.use(Vuex)
 
@@ -42,7 +42,7 @@ export type ResourceState<T> = T | 'Unavailable' | 'Loading' | 'Unknown'
 
 export interface WidgetCreator {
   description: string;
-  creationDialog: VueConstructor<Vue>;
+  creationDialog: VueConstructor;
 }
 
 export interface SpotifyState { placeholder: {} }
@@ -72,6 +72,12 @@ function defaultStoreState (): StoreState {
   }
 }
 
+export function defaultRedditState (): RedditState {
+  return {
+    subredditsHots: new Map(),
+  }
+}
+
 export interface Tab {
   name: string;
   icon: string;
@@ -88,6 +94,16 @@ export function getServiceStatus<T> (service: ResourceState<T>): ServiceStatus {
   if (service === 'Unavailable') return ServiceStatus.LoggedOut
   if (typeof service === 'object') return ServiceStatus.LoggedIn
   return ServiceStatus.LoggedOut
+}
+
+export interface ConfigPayload {
+  id: number;
+  config: WidgetConfig;
+}
+
+export interface HotsPayload {
+  subreddit: string;
+  hots: PostData[];
 }
 
 export default new Vuex.Store({
@@ -107,6 +123,14 @@ export default new Vuex.Store({
         state.userData.reddit = { ...state.userData.reddit, accountInfo: payload }
       }
     },
+    setSubredditHots (state, { subreddit, hots }: HotsPayload) {
+      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
+        const subredditsHots = state.userData.reddit.subredditsHots
+
+        subredditsHots.set(subreddit, hots)
+        state.userData.reddit = { ...state.userData.reddit, subredditsHots }
+      }
+    },
     setSpotifyState (state, payload: ResourceState<SpotifyState>) {
       if (typeof state.userData === 'object') {
         state.userData.spotify = payload
@@ -121,6 +145,15 @@ export default new Vuex.Store({
     addWidget (state, widget: Widget) {
       if (typeof state.userData === 'object') {
         state.userData.widgets.push(widget)
+      }
+    },
+    configWidget (state, { id, config }: ConfigPayload) {
+      if (typeof state.userData === 'object') {
+        const widget = state.userData.widgets.find(widget => widget.id === id)
+
+        if (widget) {
+          widget.config = config
+        }
       }
     },
     removeWidget (state, id: number) {
@@ -157,6 +190,13 @@ export default new Vuex.Store({
     redditProfile: (state): RedditAccountInfo | undefined => {
       if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
         return state.userData.reddit.accountInfo
+      } else {
+        return undefined
+      }
+    },
+    redditHots: (state): Map<string, PostData[]> | undefined => {
+      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
+        return state.userData.reddit.subredditsHots
       } else {
         return undefined
       }
