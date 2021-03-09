@@ -100,7 +100,7 @@ async fn config(
                 widget.config = config;
 
                 Response::ok(())
-            },
+            }
             None => Response::not_found(format!("Widget {} not found", id)),
         }
     })

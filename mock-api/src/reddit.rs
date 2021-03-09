@@ -109,7 +109,8 @@ fn hots_response(nbr: usize) -> Vec<HotPost> {
             thumbnail: "https://www.reddit.com/favicon.ico".to_string(),
             pinned: false,
         })
-    }).take(nbr)
+    })
+    .take(nbr)
     .collect()
 }
 
@@ -131,15 +132,30 @@ async fn spotlights(data: web::Data<AppData>, auth: BearerAuth) -> Response<Vec<
 }
 
 fn spotlights_response() -> Vec<Spotlight> {
-    vec![Spotlight {
-        name: "Hardware".to_string(),
-        description: "No, there is no stock anywhere.".to_string(),
-        population: 1_934_252,
-        icon_url: "https://styles.redditmedia.com/t5_2qh18/styles/communityIcon_2509b5q1k8z41.png"
-            .to_string(),
-        banner_url: "https://cdn.videocardz.com/1/2020/09/NVIDIA-GeForce-RTX-3080-out-of-stock.jpg"
-            .to_string(),
-    }]
+    const ICON_URL: &str =
+        "https://styles.redditmedia.com/t5_2r0ij/styles/communityIcon_yor9myhxz5x11.png";
+    const BANNER_URL: &str =
+        "https://styles.redditmedia.com/t5_2r0ij/styles/bannerBackgroundImage_6gx1wewyz5x11.jpg";
+
+    let mut pos = 0;
+
+    std::iter::from_fn(move || {
+        let nbr = pos;
+        pos += 1;
+
+        Some(Spotlight {
+            name: format!("subreddit_{}", nbr),
+            description: format!(
+                "Subreddit {} is just another randomly generated subreddit",
+                nbr
+            ),
+            population: 1_934_252,
+            icon_url: ICON_URL.to_string(),
+            banner_url: BANNER_URL.to_string(),
+        })
+    })
+    .take(10)
+    .collect()
 }
 
 #[derive(Serialize)]
