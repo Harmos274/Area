@@ -2,7 +2,7 @@ import Vue, { VueConstructor } from 'vue'
 import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist'
 import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@/store/widgets'
-import { RedditState, RedditAccountInfo, PostData } from '@/reddit'
+import { RedditState, RedditAccountInfo, PostData, Spotlight } from '@/reddit'
 
 Vue.use(Vuex)
 
@@ -75,6 +75,7 @@ function defaultStoreState (): StoreState {
 export function defaultRedditState (): RedditState {
   return {
     subredditsHots: new Map(),
+    spotlights: [],
   }
 }
 
@@ -129,6 +130,11 @@ export default new Vuex.Store({
 
         subredditsHots.set(subreddit, hots)
         state.userData.reddit = { ...state.userData.reddit, subredditsHots }
+      }
+    },
+    setRedditSpotlights (state, spotlights: Spotlight[]) {
+      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
+        state.userData.reddit = { ...state.userData.reddit, spotlights }
       }
     },
     setSpotifyState (state, payload: ResourceState<SpotifyState>) {
@@ -199,6 +205,13 @@ export default new Vuex.Store({
         return state.userData.reddit.subredditsHots
       } else {
         return undefined
+      }
+    },
+    redditSpotlights: (state): Spotlight[] => {
+      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
+        return state.userData.reddit.spotlights
+      } else {
+        return []
       }
     },
     spotifyState: (state): ResourceState<SpotifyState> => {

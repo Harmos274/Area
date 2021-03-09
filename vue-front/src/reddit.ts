@@ -3,6 +3,7 @@ import { unlinkReddit } from '@/api'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
 import HotsConfig from '@/components/widgets/reddit/HotsConfig.vue'
 import { ServiceDescription } from '@/service'
+import SpotlightsConfig from '@/components/widgets/reddit/SpotlightsConfig.vue'
 
 const client = {
   id: 'sKKnWraYCh8LoQ',
@@ -34,6 +35,7 @@ export const RedditService: ServiceDescription = {
   widgets: [
     { description: 'Profile', creationDialog: ProfileConfig },
     { description: 'Subreddit', creationDialog: HotsConfig },
+    { description: 'Spotlights', creationDialog: SpotlightsConfig },
   ],
 }
 
@@ -57,7 +59,39 @@ export interface PostData {
   pinned: boolean;
 }
 
+export function emptyPostData (): PostData {
+  return {
+    author: '',
+    title: '',
+    selftext: '',
+    score: 0,
+    ratio: 0,
+    image: '',
+    thumbnail: '',
+    pinned: false,
+  }
+}
+
+export interface Spotlight {
+  name: string;
+  description: string;
+  population: number;
+  icon_url: string;
+  banner_url: string;
+}
+
+export function emptySpotliht (): Spotlight {
+  return {
+    name: '',
+    description: '',
+    population: 0,
+    icon_url: '',
+    banner_url: '',
+  }
+}
+
 export interface RedditState {
   accountInfo?: RedditAccountInfo;
   subredditsHots: Map<string, PostData[]>;
+  spotlights: Spotlight[];
 }

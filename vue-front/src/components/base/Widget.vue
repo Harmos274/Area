@@ -1,5 +1,5 @@
 <template>
-  <v-card height="300px" style="display: flex; flex-direction: column">
+  <v-card height="350px" style="display: flex; flex-direction: column">
     <template v-if="loaded">
       <v-card-title>
         <slot name="title" />

@@ -192,6 +192,16 @@ export function getSubredditHots (subreddit: string, nbr: number): void {
   }
 }
 
+export function getRedditSpotlights (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get('/reddit/spotlights', config)
+      .then(response => store.commit('setRedditSpotlights', response.data))
+      .catch(handleErrorReddit)
+  }
+}
+
 export function linkSpotify (code: string): void {
   const config = getAuthConfig()
 

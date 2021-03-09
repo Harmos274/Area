@@ -13,7 +13,7 @@
     <h1>Area</h1>
 
     <v-container fluid class="hidden-xs-only">
-      <v-row>
+      <v-row align="center">
         <v-btn
           text
           v-for="[index, tab] in tabs.entries()"
@@ -26,8 +26,22 @@
 
         <v-spacer />
 
-        <light-dark-switch justify="end" />
-        <v-btn color="red" text @click="disconnect">Disconnect</v-btn>
+        <v-menu :close-on-content-click="false">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn icon v-bind="attrs" v-on="on">
+              <v-icon>mdi-cog</v-icon>
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item>
+              <light-dark-switch justify="center" />
+            </v-list-item>
+            <v-list-item>
+              <v-btn color="red" block text @click="disconnect">Disconnect</v-btn>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-row>
     </v-container>
   </v-app-bar>
