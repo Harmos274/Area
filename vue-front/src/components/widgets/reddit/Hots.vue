@@ -9,8 +9,12 @@
   >
     <template v-slot:title>{{ title }}</template>
     <v-list flat two-line>
-      <v-list-item-group @change="postSelected">
-        <v-list-item v-for="[index, post] in posts.entries()" v-bind:key="index">
+      <v-list-item-group>
+        <v-list-item
+          v-for="[index, post] in posts.entries()"
+          v-bind:key="index"
+          @click="postSelected(index)"
+        >
           <v-list-item-avatar>
             <v-img :src="post.thumbnail" />
           </v-list-item-avatar>
@@ -76,20 +80,11 @@ export default class Hots extends Vue {
     }
   }
 
-  private postSelected (index: number | undefined): void {
-    let success = true
+  private postSelected (index: number): void {
+    const posts = this.posts[index]
 
-    if (index !== undefined) {
-      const posts = this.posts[index]
-
-      if (posts) {
-        this.dialogPost = posts
-      } else {
-        success = false
-      }
-    }
-
-    if (success) {
+    if (posts) {
+      this.dialogPost = posts
       this.dialog = true
     }
   }

@@ -9,8 +9,12 @@
   >
     <template v-slot:title>Reddit's spotlights</template>
     <v-list flat two-line>
-      <v-list-item-group @change="spotlightSelected">
-        <v-list-item v-for="[index, spotlight] in redditSpotlights.entries()" v-bind:key="index">
+      <v-list-item-group>
+        <v-list-item
+          v-for="[index, spotlight] in redditSpotlights.entries()"
+          v-bind:key="index"
+          @click="spotlightSelected(index)"
+        >
           <v-list-item-avatar>
             <v-img :src="spotlight.icon_url" />
           </v-list-item-avatar>
@@ -74,20 +78,11 @@ export default class Spotlights extends Vue {
     getRedditSpotlights()
   }
 
-  private spotlightSelected (index: number | undefined): void {
-    let success = true
+  private spotlightSelected (index: number): void {
+    const spotlight = this.redditSpotlights[index]
 
-    if (index !== undefined) {
-      const spotlight = this.redditSpotlights[index]
-
-      if (spotlight) {
-        this.dialogSpotlight = spotlight
-      } else {
-        success = false
-      }
-    }
-
-    if (success) {
+    if (spotlight) {
+      this.dialogSpotlight = spotlight
       this.dialog = true
     }
   }

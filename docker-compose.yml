@@ -24,7 +24,7 @@ services:
             - DB_PORT
         networks:
             - db-network
-        profiles: ["api"]
+        profiles: ["api", "production"]
 
     db:
         image: "postgres:alpine"
@@ -39,7 +39,7 @@ services:
         volumes:
             - ./schema.sql://docker-entrypoint-initdb.d/schema.sql
             - db-data:/var/lib/postgresql/data
-        profiles: ["api"]
+        profiles: ["api", "production"]
 
     mock-api:
         build: mock-api
@@ -48,9 +48,15 @@ services:
         restart: on-failure
         profiles: ["mock"]
 
+    vue-front:
+        build: vue-front
+        ports:
+            - 8080:80
+        restart: on-failure
+        profiles: ["front", "production"]
+
 networks:
     db-network:
-    api-network:
 
 volumes:
     db-data:
