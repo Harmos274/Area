@@ -36,12 +36,20 @@ pub fn parse() -> Arguments {
         delay: Duration::from_millis(
             matches
                 .value_of("Delay")
+                .map(String::from)
+                .or_else(|| std::env::var("MOCK_DELAY").ok())
                 .map(|delay| delay.parse().expect("Invalid delay"))
                 .unwrap_or(0),
         ),
-        ip: matches.value_of("IP").unwrap_or("localhost").to_string(),
+        ip: matches
+            .value_of("IP")
+            .map(String::from)
+            .or_else(|| std::env::var("MOCK_IP").ok())
+            .unwrap_or_else(|| String::from("localhost")),
         port: matches
             .value_of("Port")
+            .map(String::from)
+            .or_else(|| std::env::var("MOCK_PORT").ok())
             .map(|port| port.parse().expect("Invalid port"))
             .unwrap_or(12000),
     }

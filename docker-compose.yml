@@ -24,6 +24,7 @@ services:
             - DB_PORT
         networks:
             - db-network
+        profiles: ["api"]
 
     db:
         image: "postgres:alpine"
@@ -32,12 +33,20 @@ services:
             - POSTGRES_USER=${DB_USER}
             - POSTGRES_PASSWORD=${DB_PASSWORD}
         ports:
-            - 5432:5432 
+            - 5432:5432
         networks:
             - db-network
         volumes:
             - ./schema.sql://docker-entrypoint-initdb.d/schema.sql
             - db-data:/var/lib/postgresql/data
+        profiles: ["api"]
+
+    mock-api:
+        build: mock-api
+        ports:
+            - 80:12000
+        restart: on-failure
+        profiles: ["mock"]
 
 networks:
     db-network:

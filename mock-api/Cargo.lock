@@ -324,7 +324,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "area-mock-server"
+name = "area-mock-api"
 version = "0.1.0"
 dependencies = [
  "actix-cors",

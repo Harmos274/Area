@@ -1,5 +1,5 @@
 [package]
-name = "area-mock-server"
+name = "area-mock-api"
 version = "0.1.0"
 authors = ["agarof <alban.garofoli@epitech.eu>"]
 edition = "2018"
