@@ -32,7 +32,14 @@ export default class DatabaseService {
     }
 
     static async getUserFromAccessToken(token: string): Promise<User> {
-        const user = await User.findOne({ where: { token: token }, include: [{ all: true }] })
+        const user = await User.findOne({
+            where: { token: token },
+            // sequelize-typescript don't support "nested" option on include
+            // by forcing my type on "include" i directly use sequelize API specification for common JS
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            include: [{ all: true, nested: true }],
+        })
 
         if (!user) {
             throw new DatabaseError("Can't find user")
