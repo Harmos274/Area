@@ -1,4 +1,4 @@
-import { AutoIncrement, Column, Model, PrimaryKey, Table, HasMany, DataType } from 'sequelize-typescript'
+import { AutoIncrement, Column, Model, PrimaryKey, Table, DataType } from 'sequelize-typescript'
 
 @Table({ tableName: 'services', timestamps: false })
 export default class Service extends Model<Service> {
