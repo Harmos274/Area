@@ -2,10 +2,8 @@ use actix_web::{dev::HttpServiceFactory, get, post, web};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use serde::{Deserialize, Serialize};
 
-// Return Either<Response<T>, Response<String>>
-
 use crate::{
-    data::{AppData, LinkData},
+    data::{AppData, LinkData, User},
     responses::{self, Response, ServiceStatus},
 };
 
@@ -17,6 +15,21 @@ pub fn service() -> impl HttpServiceFactory {
         .service(profile)
         .service(hots)
         .service(spotlights)
+}
+
+fn check_link<F, R>(user: &User, f: F) -> Response<R>
+where
+    F: FnOnce(&User) -> Response<R>,
+    R: Serialize,
+{
+    if let Some(_) = user.reddit {
+        f(user)
+    } else {
+        Response::forbidden(format!(
+            "User {} have not linked their Reddit account.",
+            user.username
+        ))
+    }
 }
 
 #[post("/link")]
@@ -52,18 +65,20 @@ async fn status(data: web::Data<AppData>, auth: BearerAuth) -> Response<ServiceS
 
 #[get("/profile")]
 async fn profile(data: web::Data<AppData>, auth: BearerAuth) -> Response<ProfileResponse> {
-    data.map_to_user(auth.token(), |_| profile_response())
+    data.map_to_user(auth.token(), |user| {
+        check_link(user, |_| Response::ok(profile_response()))
+    })
 }
 
-fn profile_response() -> Response<ProfileResponse> {
-    Response::ok(ProfileResponse {
+fn profile_response() -> ProfileResponse {
+    ProfileResponse {
         name: "Toothless".to_string(),
         icon_url: "https://tissuspicious.files.wordpress.com/2013/09/toothless.png".to_string(),
         awardee_karma: 24312,
         awarder_karma: 3219,
         link_karma: 32091,
         comment_karma: 32421,
-    })
+    }
 }
 
 #[derive(Serialize)]
@@ -82,7 +97,9 @@ async fn hots(
     auth: BearerAuth,
     params: web::Query<HotsParameters>,
 ) -> Response<Vec<HotPost>> {
-    data.map_to_user(auth.token(), |_| Response::ok(hots_response(params.nbr)))
+    data.map_to_user(auth.token(), |user| {
+        check_link(user, |_| Response::ok(hots_response(params.nbr)))
+    })
 }
 
 #[allow(dead_code)]
@@ -128,7 +145,9 @@ struct HotPost {
 
 #[get("/spotlights")]
 async fn spotlights(data: web::Data<AppData>, auth: BearerAuth) -> Response<Vec<Spotlight>> {
-    data.map_to_user(auth.token(), |_| Response::ok(spotlights_response()))
+    data.map_to_user(auth.token(), |user| {
+        check_link(user, |_| Response::ok(spotlights_response()))
+    })
 }
 
 fn spotlights_response() -> Vec<Spotlight> {
