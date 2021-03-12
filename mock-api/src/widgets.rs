@@ -89,10 +89,10 @@ async fn config(
     data: web::Data<AppData>,
     auth: BearerAuth,
     id: web::Path<usize>,
-    config: web::Json<WidgetConfig>,
+    config: web::Json<ConfigBody>,
 ) -> Response<()> {
     let id = id.0;
-    let config = config.0;
+    let config = config.0.config;
 
     data.map_to_user_mut(auth.token(), |user| {
         match user.widgets.iter_mut().find(|widget| widget.id == id) {
@@ -104,6 +104,11 @@ async fn config(
             None => Response::not_found(format!("Widget {} not found", id)),
         }
     })
+}
+
+#[derive(Deserialize)]
+struct ConfigBody {
+    config: WidgetConfig,
 }
 
 #[delete("/{id}")]
