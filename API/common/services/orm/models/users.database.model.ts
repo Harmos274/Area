@@ -1,5 +1,6 @@
-import { AutoIncrement, BelongsTo, Column, DataType, ForeignKey, HasOne, Model, PrimaryKey, Table } from 'sequelize-typescript'
+import { AutoIncrement, BelongsTo, Column, DataType, HasMany, Model, PrimaryKey, Table } from 'sequelize-typescript'
 import Service from './services.database.model'
+import Widget from './widgets.database.model'
 
 @Table({ tableName: 'users', timestamps: false })
 export default class User extends Model<User> {
@@ -31,4 +32,7 @@ export default class User extends Model<User> {
 
     @Column(DataType.DATE)
     token_expire_date?: Date
+
+    @HasMany(() => Widget, 'user_id')
+    widgets?: Array<Widget>
 }
