@@ -118,7 +118,8 @@ export default class RedditService {
                         trendies.data.description,
                         trendies.data.active_user_count,
                         trendies.data.icon_img ? trendies.data.icon_img : trendies.data.community_icon.split('?')[0],
-                        trendies.data.banner_img
+                        trendies.data.banner_img,
+                        trendies.data.url
                     )
             )
         } catch (e: unknown) {
@@ -144,7 +145,8 @@ export default class RedditService {
                         child.data.upvote_ratio,
                         child.data.preview?.images[0].source.url,
                         child.data.thumbnail,
-                        child.data.stickied
+                        child.data.stickied,
+                        child.data.url
                     )
             )
         } catch (e: unknown) {

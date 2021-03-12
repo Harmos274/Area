@@ -1,5 +1,5 @@
 export default class RedditHotsModel {
-    constructor(author: string, title: string, selftext: string, score: number, ratio: number, image: string, thumbnail: string, pinned: boolean) {
+    constructor(author: string, title: string, selftext: string, score: number, ratio: number, image: string, thumbnail: string, pinned: boolean, url: string) {
         this.author = author
         this.title = title
         this.selftext = selftext
@@ -8,6 +8,7 @@ export default class RedditHotsModel {
         this.image = image
         this.thumbnail = thumbnail
         this.pinned = pinned
+        this.url = url
     }
 
     author: string
@@ -18,4 +19,5 @@ export default class RedditHotsModel {
     image: string
     thumbnail: string
     pinned: boolean
+    url: string
 }
