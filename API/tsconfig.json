@@ -16,6 +16,7 @@
     "auth/**/*",
     "reddit/**/*",
     "common/**/*",
+    "widget/**/*"
   ],
 
   "exclude": [

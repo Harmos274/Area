@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser'
 
 import AuthenticationRouter from './auth/routes.config'
 import RedditRouter from './reddit/routes.config'
+import WidgetRouter from './widget/routes.config'
 import { Orm as orm } from './common/services/orm/orm.service'
 
 const app = express()
@@ -13,6 +14,7 @@ app.use(bodyParser.json())
 // Add api endpoint
 AuthenticationRouter(app)
 RedditRouter(app)
+WidgetRouter(app)
 
 // Cors config
 app.use((req, res, next) => {
