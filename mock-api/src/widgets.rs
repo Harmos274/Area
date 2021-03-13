@@ -35,7 +35,7 @@ async fn add(
                 widget_id: user.widget_counter - 1,
             })
         } else {
-            Response::bad_request("Invalid widget".to_string())
+            Response::bad_request("Invalid type_name".to_string())
         }
     })
 }
@@ -43,7 +43,7 @@ async fn add(
 #[derive(Deserialize)]
 struct AddData {
     type_name: String,
-    config: WidgetConfig,
+    config: Option<WidgetConfig>,
 }
 
 #[derive(Serialize)]
@@ -52,16 +52,21 @@ struct AddResponse {
 }
 
 fn widget_from_add_data(data: AddData, id: usize) -> Option<Widget> {
+    let has_config = data
+        .config
+        .as_ref()
+        .map(|conf| conf.name.is_some() || conf.number.is_some())
+        .unwrap_or(false);
     let widget_type = type_from_name(&data.type_name)?;
 
-    if widget_type.configurable != (data.config.name.is_some() || data.config.number.is_some()) {
+    if widget_type.configurable != has_config {
         return None;
     }
 
     Some(Widget {
         id,
         widget_type,
-        config: data.config,
+        config: data.config.unwrap_or(WidgetConfig::default()),
     })
 }
 
@@ -69,7 +74,7 @@ fn type_from_name(name: &str) -> Option<&'static WidgetType> {
     WIDGETS.iter().find(|widget| widget.name == name)
 }
 
-const WIDGETS: [WidgetType; 3] = [
+const WIDGETS: [WidgetType; 6] = [
     WidgetType {
         name: "reddit_profile",
         configurable: false,
@@ -81,6 +86,18 @@ const WIDGETS: [WidgetType; 3] = [
     WidgetType {
         name: "reddit_spotlights",
         configurable: false,
+    },
+    WidgetType {
+        name: "spotify_profile",
+        configurable: false,
+    },
+    WidgetType {
+        name: "spotify_music",
+        configurable: true,
+    },
+    WidgetType {
+        name: "spotify_podcast",
+        configurable: true,
     },
 ];
 
