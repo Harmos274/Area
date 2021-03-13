@@ -7,6 +7,7 @@ import RedditRouter from './reddit/routes.config'
 import WidgetRouter from './widget/routes.config'
 import SpotifyRouter from './spotify/routes.config'
 import { Orm as orm } from './common/services/orm/orm.service'
+import AboutRouter from './about/route.config'
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,6 +18,7 @@ AuthenticationRouter(app)
 RedditRouter(app)
 SpotifyRouter(app)
 WidgetRouter(app)
+AboutRouter(app)
 
 // Cors config
 app.use((req, res, next) => {

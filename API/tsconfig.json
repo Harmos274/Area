@@ -17,7 +17,8 @@
     "reddit/**/*",
     "common/**/*",
     "widget/**/*",
-    "spotify/**/*"
+    "spotify/**/*",
+    "about/**/*"
   ],
 
   "exclude": [
