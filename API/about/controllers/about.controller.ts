@@ -9,6 +9,7 @@ import AboutServices from '../services/about.services'
 export function about(req: Request, res: Response<BaseAboutResponseModel, Record<string, Token>>): void {
     const user = res.locals.oauth?.user as User
     const hostUrl = `${req.protocol}://${req.get('host')}`
+
     if (user) {
         const service = new AboutServices(user)
 
