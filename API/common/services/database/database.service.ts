@@ -62,7 +62,7 @@ export default class DatabaseService {
                     token_expire_date: serviceTokenExpireDate,
                     enabled: true,
                 })
-                await user.$set('reddit', service.service_id)
+                await user.$set(serviceType, service.service_id)
             } else {
                 user[serviceType].token = serviceToken
                 user[serviceType].refresh_token = serviceRefreshToken
@@ -101,8 +101,10 @@ export default class DatabaseService {
 
     static async disableService(serviceType: ServiceType, user: User): Promise<void> {
         try {
-            user[serviceType].enabled = false
-            await user[serviceType].save()
+            if (user[serviceType]) {
+                user[serviceType].enabled = false
+                await user[serviceType].save()
+            }
         } catch (e: unknown) {
             if (e instanceof ValidationError) {
                 throw new DatabaseError("Can't write on database")
