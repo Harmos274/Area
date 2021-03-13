@@ -78,4 +78,7 @@ alter table widgets owner to "user";
 insert into widget_types(type, configurable)
 values ('reddit_profile', false),
        ('reddit_hots', true),
-       ('reddit_spotlights', false);
+       ('reddit_spotlights', false),
+       ('spotify_profile', false),
+       ('spotify_music', true),
+       ('spotify_podcast', true);
