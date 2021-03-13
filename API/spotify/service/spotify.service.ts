@@ -1,7 +1,6 @@
 import SpotifyWebApi = require('spotify-web-api-node')
 import SpotifyConfig from '../config/spotify.config'
 import SpotifyProfileModel from './models/spotify.profile.model'
-import { match } from 'assert'
 import SpotifyErrorModel from './models/spotify.error.model'
 
 const SpotifyAPi = new SpotifyWebApi(SpotifyConfig)
@@ -23,6 +22,21 @@ export default class SpotifyService {
 
             service.expire_date = new Date(today.getTime() + 1000 * access.body.expires_in) // request time + spotify token lifetime
             service.refresh_token = access.body.refresh_token
+            return service
+        } catch (e: unknown) {
+            throw new SpotifyErrorModel(e.toString())
+        }
+    }
+
+    static async fromRefreshToken(refresh_token: string): Promise<SpotifyService> {
+        try {
+            const today = new Date()
+            SpotifyAPi.setRefreshToken(refresh_token)
+            const access = await SpotifyAPi.refreshAccessToken()
+            const service = new SpotifyService(access.body.access_token)
+
+            service.expire_date = new Date(today.getTime() + 1000 * access.body.expires_in) // request time + spotify token lifetime
+            service.refresh_token = refresh_token
             return service
         } catch (e: unknown) {
             throw new SpotifyErrorModel(e.toString())
