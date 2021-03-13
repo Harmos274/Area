@@ -17,6 +17,7 @@
     "reddit/**/*",
     "common/**/*",
     "widget/**/*",
+    "spotify/**/*",
     "about/**/*"
   ],
 
