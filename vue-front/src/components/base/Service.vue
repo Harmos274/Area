@@ -70,7 +70,7 @@ import { mapMutations } from 'vuex'
 import { ServiceStatus } from '@/store'
 import Empty from '@/components/Empty.vue'
 import { ServiceDescription } from '@/service'
-import { WidgetName, WidgetConfig } from '@/store/widgets'
+import { WidgetName, WidgetConfig } from '@/widgets'
 import { addWidget } from '@/api'
 
 @Component({

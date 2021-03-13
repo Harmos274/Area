@@ -44,24 +44,19 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { WidgetConfig } from '@/store/widgets'
+import { WidgetConfig } from '@/widgets'
 import Widget from '@/components/base/Widget.vue'
 import HotsConfig from '@/components/widgets/reddit/HotsConfig.vue'
 import { getSubredditHots } from '@/api'
 import { emptyPostData, PostData } from '@/reddit'
-import { mapGetters } from 'vuex'
 
 @Component({
   components: { Widget },
-
-  computed: {
-    ...mapGetters(['redditHots']),
-  },
 })
 export default class Hots extends Vue {
-  redditHots!: Map<string, PostData[]> | undefined
-
   private configWidget = HotsConfig
+
+  private posts: PostData[] = []
 
   private dialog = false
   private dialogPost: PostData = emptyPostData()
@@ -69,6 +64,11 @@ export default class Hots extends Vue {
   private updateFunction (): void {
     if (this.config.name !== undefined && this.config.number !== undefined) {
       getSubredditHots(this.config.name, this.config.number)
+        .then(posts => {
+          if (posts) {
+            this.posts = posts
+          }
+        })
     }
   }
 
@@ -81,25 +81,10 @@ export default class Hots extends Vue {
   }
 
   private postSelected (index: number): void {
-    const posts = this.posts[index]
-
-    if (posts) {
-      this.dialogPost = posts
+    if (this.posts.length > index) {
+      this.dialogPost = this.posts[index]
       this.dialog = true
     }
-  }
-
-  private get posts (): PostData[] {
-    const hots = this.redditHots
-
-    if (hots && this.config.name) {
-      const posts = hots.get(this.config.name)
-
-      if (posts) {
-        return posts
-      }
-    }
-    return []
   }
 
   @Prop({ required: true })

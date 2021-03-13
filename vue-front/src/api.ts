@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import store, { defaultRedditState } from '@/store'
-import { getWidget, WidgetConfig, WidgetName } from '@/store/widgets'
+import store from '@/store'
+import { getWidget, WidgetConfig, WidgetName } from '@/widgets'
 import router from '@/router'
+import { PostData } from '@/reddit'
 
 const client = {
   id: 'vue-front',
@@ -46,7 +47,7 @@ function handleError (response: ErrorResponse): void {
 
 function handleErrorReddit (response: ErrorResponse): void {
   if (response.status === 403) {
-    store.commit('setRedditState', defaultRedditState())
+    store.commit('setRedditState', 'Unavailable')
   }
 
   handleError(response)
@@ -54,7 +55,7 @@ function handleErrorReddit (response: ErrorResponse): void {
 
 function handleErrorSpotify (response: ErrorResponse): void {
   if (response.status === 403) {
-    store.commit('setSpotifyState', {})
+    store.commit('setSpotifyState', 'Unavailable')
   }
 
   handleError(response)
@@ -126,7 +127,7 @@ export function linkReddit (code: string): void {
     store.commit('setRedditState', 'Loading')
 
     axios.post('/reddit/link', { code }, config)
-      .then(() => store.commit('setRedditState', defaultRedditState()))
+      .then(() => store.commit('setRedditState', {}))
       .catch(handleErrorReddit)
   }
 }
@@ -160,7 +161,7 @@ export function statusReddit (): void {
         const status = response.data as StatusResponse
 
         if (status.logged_in) {
-          store.commit('setRedditState', defaultRedditState())
+          store.commit('setRedditState', {})
         } else {
           store.commit('setRedditState', 'LoggedOut')
         }
@@ -177,18 +178,20 @@ export function profileReddit (): void {
 
   if (config) {
     axios.get('/reddit/profile', config)
-      .then(response => store.commit('setRedditProfile', response.data))
+      .then(response => store.commit('sumRedditState', { accountInfo: response.data }))
       .catch(handleErrorReddit)
   }
 }
 
-export function getSubredditHots (subreddit: string, nbr: number): void {
+export async function getSubredditHots (subreddit: string, nbr: number): Promise<PostData[] | undefined> {
   const config = getAuthConfig()
 
   if (config) {
-    axios.get(`/reddit/hots?sub=${subreddit}&nbr=${nbr}`, config)
-      .then(response => store.commit('setSubredditHots', { subreddit, hots: response.data }))
+    return axios.get(`/reddit/hots?sub=${subreddit}&nbr=${nbr}`, config)
+      .then(response => response.data)
       .catch(handleErrorReddit)
+  } else {
+    return new Promise(resolve => resolve(undefined))
   }
 }
 
@@ -197,7 +200,7 @@ export function getRedditSpotlights (): void {
 
   if (config) {
     axios.get('/reddit/spotlights', config)
-      .then(response => store.commit('setRedditSpotlights', response.data))
+      .then(response => store.commit('sumRedditState', { spotlights: response.data }))
       .catch(handleErrorReddit)
   }
 }
@@ -256,6 +259,40 @@ export function statusSpotify (): void {
   }
 }
 
+export function getSpotifyProfile (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get('/spotify/profile', config)
+      .then(response => store.commit('sumSpotifyState', { profile: response.data }))
+      .catch(handleErrorSpotify)
+  }
+}
+
+export async function getSpotifyPlayerSrc (uri: string): Promise<string | undefined> {
+  const config = getAuthConfig()
+
+  if (config) {
+    return axios.get(`/spotify/music?uri=${uri}`, config)
+      .then(response => response.data.url)
+      .catch(handleErrorSpotify)
+  } else {
+    return new Promise(resolve => resolve(undefined))
+  }
+}
+
+export async function getSpotifyShowPlayerSrc (uri: string): Promise<string | undefined> {
+  const config = getAuthConfig()
+
+  if (config) {
+    return axios.get(`/spotify/podcast?uri=${uri}`, config)
+      .then(response => response.data.url)
+      .catch(handleErrorSpotify)
+  } else {
+    return new Promise(resolve => resolve(undefined))
+  }
+}
+
 export function addWidget (type_name: WidgetName, config: WidgetConfig): void {
   const axios_config = getAuthConfig()
 
@@ -292,7 +329,7 @@ export async function setWidgetConfig (id: number, config: WidgetConfig): Promis
   const axiosConfig = getAuthConfig()
 
   if (config) {
-    return axios.patch(`/widget/${id}`, config, axiosConfig)
+    return axios.patch(`/widget/${id}`, { config }, axiosConfig)
       .then(() => store.commit('configWidget', { id, config }))
       .catch(handleError)
   } else {

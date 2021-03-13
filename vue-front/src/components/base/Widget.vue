@@ -1,17 +1,19 @@
 <template>
   <v-card height="350px" style="display: flex; flex-direction: column">
     <template v-if="loaded">
-      <v-card-title>
+      <v-card-title v-if="!noTitle">
         <slot name="title" />
       </v-card-title>
       <v-card-text
         class="text--primary flex-grow-1 overflow-y-auto"
         :class="scrollbarTheme"
+        v-if="!fullBody"
       >
         <slot />
       </v-card-text>
+      <template v-else><slot /></template>
     </template>
-    <v-skeleton-loader v-else type="title image" />
+    <v-skeleton-loader height="100%" v-else :type="loaderType" />
 
     <v-divider />
 
@@ -38,7 +40,7 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import { removeWidget, setWidgetConfig } from '@/api'
 import { VueConstructor } from 'vue'
-import { WidgetConfig, WidgetName } from '@/store/widgets'
+import { WidgetConfig, WidgetName } from '@/widgets'
 
 @Component
 export default class Widget extends Vue {
@@ -74,7 +76,7 @@ export default class Widget extends Vue {
     return this.$vuetify.theme.dark ? 'dark' : 'light'
   }
 
-  @Prop({ required: true })
+  @Prop({ required: false, default: true })
   loaded!: boolean
 
   @Prop({ required: true })
@@ -83,7 +85,8 @@ export default class Widget extends Vue {
   @Prop({ required: true })
   refreshTimer!: number
 
-  @Prop({ required: true })
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  @Prop({ required: false, default: () => {} })
   updateFunction!: () => void
 
   @Prop({ required: true })
@@ -91,6 +94,15 @@ export default class Widget extends Vue {
 
   @Prop({ required: true })
   config!: WidgetConfig
+
+  @Prop({ required: false, default: 'card-heading, image, image' })
+  loaderType!: string
+
+  @Prop({ required: false, default: false, type: Boolean })
+  noTitle!: boolean
+
+  @Prop({ required: false, default: false, type: Boolean })
+  fullBody!: boolean
 }
 </script>
 

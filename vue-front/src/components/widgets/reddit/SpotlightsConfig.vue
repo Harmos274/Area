@@ -10,7 +10,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import WidgetConfigDialog from '@/components/base/WidgetConfigDialog.vue'
-import { WidgetName } from '@/store/widgets'
+import { WidgetName } from '@/widgets'
 
 @Component({
   components: { WidgetCreationDialog: WidgetConfigDialog },

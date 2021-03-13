@@ -2,7 +2,6 @@
   <widget-creation-dialog
     title="Subreddit Viewer"
     description="This widget displays the latest and hottest posts from a given subreddit."
-    id="0"
     @done="$emit('done', name, { name: subreddit, number })"
     :button-text="buttonText"
     :validator="validator"
@@ -21,7 +20,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import WidgetConfigDialog from '@/components/base/WidgetConfigDialog.vue'
-import { WidgetConfig, WidgetName } from '@/store/widgets'
+import { WidgetConfig, WidgetName } from '@/widgets'
 
 @Component({
   components: { WidgetCreationDialog: WidgetConfigDialog },

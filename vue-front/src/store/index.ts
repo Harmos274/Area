@@ -1,8 +1,9 @@
 import Vue, { VueConstructor } from 'vue'
 import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist'
-import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@/store/widgets'
+import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@/widgets'
 import { RedditState, RedditAccountInfo, PostData, Spotlight } from '@/reddit'
+import { SpotifyState } from '@/spotify'
 
 Vue.use(Vuex)
 
@@ -45,8 +46,6 @@ export interface WidgetCreator {
   creationDialog: VueConstructor;
 }
 
-export interface SpotifyState { placeholder: {} }
-
 interface UserData {
   reddit: ResourceState<RedditState>;
   spotify: ResourceState<SpotifyState>;
@@ -69,13 +68,6 @@ function defaultStoreState (): StoreState {
 
     darkTheme: true,
     drawer: false,
-  }
-}
-
-export function defaultRedditState (): RedditState {
-  return {
-    subredditsHots: new Map(),
-    spotlights: [],
   }
 }
 
@@ -119,27 +111,19 @@ export default new Vuex.Store({
         state.userData.reddit = payload
       }
     },
-    setRedditProfile (state, payload: RedditAccountInfo | undefined) {
+    sumRedditState (state, payload: RedditState) {
       if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
-        state.userData.reddit = { ...state.userData.reddit, accountInfo: payload }
-      }
-    },
-    setSubredditHots (state, { subreddit, hots }: HotsPayload) {
-      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
-        const subredditsHots = state.userData.reddit.subredditsHots
-
-        subredditsHots.set(subreddit, hots)
-        state.userData.reddit = { ...state.userData.reddit, subredditsHots }
-      }
-    },
-    setRedditSpotlights (state, spotlights: Spotlight[]) {
-      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
-        state.userData.reddit = { ...state.userData.reddit, spotlights }
+        state.userData.reddit = { ...state.userData.reddit, ...payload }
       }
     },
     setSpotifyState (state, payload: ResourceState<SpotifyState>) {
       if (typeof state.userData === 'object') {
         state.userData.spotify = payload
+      }
+    },
+    sumSpotifyState (state, payload: SpotifyState) {
+      if (typeof state.userData === 'object' && typeof state.userData.spotify === 'object') {
+        state.userData.spotify = { ...state.userData.spotify, ...payload }
       }
     },
 
@@ -200,18 +184,11 @@ export default new Vuex.Store({
         return undefined
       }
     },
-    redditHots: (state): Map<string, PostData[]> | undefined => {
-      if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
-        return state.userData.reddit.subredditsHots
-      } else {
-        return undefined
-      }
-    },
-    redditSpotlights: (state): Spotlight[] => {
+    redditSpotlights: (state): Spotlight[] | undefined => {
       if (typeof state.userData === 'object' && typeof state.userData.reddit === 'object') {
         return state.userData.reddit.spotlights
       } else {
-        return []
+        return undefined
       }
     },
     spotifyState: (state): ResourceState<SpotifyState> => {

@@ -19,7 +19,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component, Prop } from 'vue-property-decorator'
-import { Widget } from '@/store/widgets'
+import { Widget } from '@/widgets'
 
 @Component
 export default class WidgetConfigDialog extends Vue {

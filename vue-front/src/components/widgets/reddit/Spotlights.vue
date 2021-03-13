@@ -1,6 +1,6 @@
 <template>
   <widget
-    :loaded="redditSpotlights !== []"
+    :loaded="content !== []"
     :id="id"
     :refresh-timer="config.refresh"
     :update-function="updateFunction"
@@ -11,7 +11,7 @@
     <v-list flat two-line>
       <v-list-item-group>
         <v-list-item
-          v-for="[index, spotlight] in redditSpotlights.entries()"
+          v-for="[index, spotlight] in content.entries()"
           v-bind:key="index"
           @click="spotlightSelected(index)"
         >
@@ -52,10 +52,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
-import { WidgetConfig } from '@/store/widgets'
+import { WidgetConfig } from '@/widgets'
 import Widget from '@/components/base/Widget.vue'
 import { getRedditSpotlights } from '@/api'
-import { emptySpotliht, Spotlight } from '@/reddit'
+import { emptySpotlight, Spotlight } from '@/reddit'
 import { mapGetters } from 'vuex'
 import SpotlightsConfig from '@/components/widgets/reddit/SpotlightsConfig.vue'
 
@@ -67,22 +67,30 @@ import SpotlightsConfig from '@/components/widgets/reddit/SpotlightsConfig.vue'
   },
 })
 export default class Spotlights extends Vue {
-  redditSpotlights!: Spotlight[]
+  redditSpotlights!: Spotlight[] | undefined
 
   private configWidget = SpotlightsConfig
 
   private dialog = false
-  private dialogSpotlight: Spotlight = emptySpotliht()
+  private dialogSpotlight: Spotlight = emptySpotlight()
 
   private updateFunction (): void {
     getRedditSpotlights()
   }
 
-  private spotlightSelected (index: number): void {
-    const spotlight = this.redditSpotlights[index]
+  private get content (): Spotlight[] {
+    const spotlights = this.redditSpotlights
 
-    if (spotlight) {
-      this.dialogSpotlight = spotlight
+    if (spotlights !== undefined) {
+      return spotlights
+    } else {
+      return []
+    }
+  }
+
+  private spotlightSelected (index: number): void {
+    if (this.content.length > index) {
+      this.dialogSpotlight = this.content[index]
       this.dialog = true
     }
   }

@@ -10,7 +10,6 @@ const client = {
   redirect: `${baseSelfUrl}/callbacks/reddit`,
   authUrlBase: 'https://www.reddit.com/api/v1/authorize',
   scopes: ['identity', 'read'],
-  // scopes: ['identity', 'read', 'account', 'creddits', 'edit', 'flair', 'history', 'identity', 'livemanage', 'modconfig', 'modcontributors', 'modflair', 'modlog', 'modmail', 'modothers', 'modposts', 'modself', 'modwiki', 'mysubreddits', 'privatemessages', 'read', 'report', 'save', 'structuredstyles', 'submit', 'subscribe', 'vote', 'wikiedit', 'wikiread'],
 }
 
 export function getUrl (): URL {
@@ -80,7 +79,7 @@ export interface Spotlight {
   banner_url: string;
 }
 
-export function emptySpotliht (): Spotlight {
+export function emptySpotlight (): Spotlight {
   return {
     name: '',
     description: '',
@@ -92,6 +91,5 @@ export function emptySpotliht (): Spotlight {
 
 export interface RedditState {
   accountInfo?: RedditAccountInfo;
-  subredditsHots: Map<string, PostData[]>;
-  spotlights: Spotlight[];
+  spotlights?: Spotlight[];
 }

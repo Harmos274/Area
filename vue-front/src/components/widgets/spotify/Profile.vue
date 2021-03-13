@@ -15,9 +15,9 @@
     <v-list>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>{{ content.comment_karma }} comment karma</v-list-item-title>
-          <v-list-item-title>{{ content.link_karma }} link karma</v-list-item-title>
-          <v-list-item-title>{{ content.comment_karma + content.link_karma }} total karma</v-list-item-title>
+          <v-list-item-title>{{ content.followers }} followers</v-list-item-title>
+          <v-list-item-title v-if="content.is_premium">Premium account</v-list-item-title>
+          <v-list-item-title v-else>Free account</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -28,10 +28,11 @@
 import { Component, Vue, Prop } from 'vue-property-decorator'
 import Widget from '@/components/base/Widget.vue'
 import { mapGetters } from 'vuex'
-import { RedditAccountInfo } from '@/reddit'
-import { profileReddit } from '@/api'
+import { getSpotifyProfile } from '@/api'
 import { WidgetConfig } from '@/widgets'
-import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
+import ProfileConfig from '@/components/widgets/spotify/ProfileConfig.vue'
+import { SpotifyProfile, SpotifyState } from '@/spotify'
+import { ResourceState } from '@/store'
 
 @Component({
   components: {
@@ -39,39 +40,47 @@ import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
   },
 
   computed: {
-    ...mapGetters(['redditProfile']),
+    ...mapGetters(['spotifyState']),
   },
 })
 export default class Profile extends Vue {
-  redditProfile!: RedditAccountInfo | undefined
+  spotifyState!: ResourceState<SpotifyState>
+
+  private get stateProfile (): SpotifyProfile | undefined {
+    const state = this.spotifyState
+
+    if (typeof state === 'object' && state.profile !== undefined) {
+      return state.profile
+    }
+    return undefined
+  }
 
   private get loaded (): boolean {
-    return !!this.redditProfile
+    return this.stateProfile !== undefined
   }
 
   private update (): void {
-    profileReddit()
+    getSpotifyProfile()
   }
 
   private configWidget = ProfileConfig
 
   private get title (): string {
-    return `${this.content.name}'s Reddit profile`
+    return `${this.content.name}'s Spotify profile`
   }
 
-  private get content (): RedditAccountInfo {
-    const state = this.redditProfile
+  private get content (): SpotifyProfile {
+    const state = this.stateProfile
 
     if (state) {
       return state
     } else {
       return {
         name: '',
+        email: '',
         icon_url: '',
-        awardee_karma: 0,
-        awarder_karma: 0,
-        link_karma: 0,
-        comment_karma: 0,
+        followers: 0,
+        is_premium: false,
       }
     }
   }
