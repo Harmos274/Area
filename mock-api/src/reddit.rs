@@ -125,6 +125,7 @@ fn hots_response(nbr: usize) -> Vec<HotPost> {
             image: "https://i.redd.it/rq36kl1xjxr01.png".to_string(),
             thumbnail: "https://www.reddit.com/favicon.ico".to_string(),
             pinned: false,
+            url: "https://www.reddit.com/r/MonaLeslie/comments/bj3bxp/_/".to_string(),
         })
     })
     .take(nbr)
@@ -141,6 +142,7 @@ struct HotPost {
     image: String,
     thumbnail: String,
     pinned: bool,
+    url: String,
 }
 
 #[get("/spotlights")]
@@ -171,6 +173,7 @@ fn spotlights_response() -> Vec<Spotlight> {
             population: 1_934_252,
             icon_url: ICON_URL.to_string(),
             banner_url: BANNER_URL.to_string(),
+            url: "r/Pizza".to_string(),
         })
     })
     .take(10)
@@ -184,4 +187,5 @@ struct Spotlight {
     population: u64,
     icon_url: String,
     banner_url: String,
+    url: String,
 }
