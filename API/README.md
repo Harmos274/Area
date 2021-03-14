@@ -21,4 +21,4 @@ the scopes `read:user` and `repo`.
 ```
 
 ### Testing
-A `postman collection` is available at the repo's root to test the API with `podman`.
+A `postman collection` is available at the repo's root to test the API with `postman`.

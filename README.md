@@ -18,6 +18,9 @@ Reddit can show your *profile* info, *spotlights* subreddit and the best post of
 #### Spotify
 Spotify can show your *profile* info, a *podcast* player and a *playlist* .
 
+### GitHub
+GitHub can show your *profile* info, your *issues* and the most popular repositories at the moment.
+
 ### Cross-platform
 Area can save your widget and their configurations in order to make them available on any device where your account is connected. 
 
@@ -28,6 +31,6 @@ You can build the project with the given `docker-compose`.
 
 <br>
 
-## Documentation 
-A **wiki** is available to the repo which describe the API Endpoints.
+## Documentation
+A **wiki** is available which describe the API Endpoints.
 
