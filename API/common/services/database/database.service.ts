@@ -4,7 +4,7 @@ import { ValidationError } from 'sequelize'
 import DatabaseError from './models/database.error.model'
 import Service from '../orm/models/services.database.model'
 
-export type ServiceType = 'reddit' | 'spotify' | 'twitter'
+export type ServiceType = 'reddit' | 'spotify' | 'github'
 
 export default class DatabaseService {
     private static crypt(source: string): string {

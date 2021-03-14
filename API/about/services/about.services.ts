@@ -3,7 +3,7 @@ import { ServiceModel } from './models/service.model'
 import { ServiceType } from '../../common/services/database/database.service'
 import { WidgetModel } from './models/widget.model'
 
-const availableServices: Array<ServiceType> = ['reddit']
+const availableServices: Array<ServiceType> = ['reddit', 'spotify', 'github']
 
 export default class AboutServices {
     constructor(user: User) {
