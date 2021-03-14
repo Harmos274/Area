@@ -18,8 +18,8 @@ export default class User extends Model<User> {
     @Column
     password!: string
 
-    @BelongsTo(() => Service, 'twitter_id')
-    twitter?: Service
+    @BelongsTo(() => Service, 'github_id')
+    github?: Service
 
     @BelongsTo(() => Service, 'reddit_id')
     reddit?: Service

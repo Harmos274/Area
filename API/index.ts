@@ -6,8 +6,9 @@ import AuthenticationRouter from './auth/routes.config'
 import RedditRouter from './reddit/routes.config'
 import WidgetRouter from './widget/routes.config'
 import SpotifyRouter from './spotify/routes.config'
-import { Orm as orm } from './common/services/orm/orm.service'
 import AboutRouter from './about/route.config'
+import GithubRouter from './github/routes.config'
+import { Orm as orm } from './common/services/orm/orm.service'
 
 const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -17,6 +18,7 @@ app.use(bodyParser.json())
 AuthenticationRouter(app)
 RedditRouter(app)
 SpotifyRouter(app)
+GithubRouter(app)
 WidgetRouter(app)
 AboutRouter(app)
 
