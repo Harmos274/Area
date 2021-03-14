@@ -52,9 +52,7 @@ export default class Profile extends Vue {
     return typeof this.githubState === 'object'
   }
 
-  private update (): void {
-    getGithubProfile()
-  }
+  private update: () => void = getGithubProfile
 
   private configWidget = ProfileConfig
 

@@ -3,7 +3,7 @@
     :loaded="content !== []"
     :id="id"
     :refresh-timer="config.refresh"
-    :update-function="updateFunction"
+    :update-function="update"
     :configWidget="configWidget"
     :config="config"
   >
@@ -74,9 +74,7 @@ export default class Spotlights extends Vue {
   private dialog = false
   private dialogSpotlight: Spotlight = emptySpotlight()
 
-  private updateFunction (): void {
-    getRedditSpotlights()
-  }
+  private update: () => void = getRedditSpotlights
 
   private get content (): Spotlight[] {
     const spotlights = this.redditSpotlights

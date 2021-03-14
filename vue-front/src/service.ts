@@ -9,4 +9,4 @@ export interface ServiceDescription {
   widgets: Array<WidgetCreator>;
 }
 
-export type Service = 'reddit' | 'spotify'
+export type Service = 'reddit' | 'spotify' | 'github'

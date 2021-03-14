@@ -59,9 +59,7 @@ export default class Profile extends Vue {
     return this.stateProfile !== undefined
   }
 
-  private update (): void {
-    getSpotifyProfile()
-  }
+  private update: () => void = getSpotifyProfile
 
   private configWidget = ProfileConfig
 

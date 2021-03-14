@@ -29,7 +29,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator'
 import Widget from '@/components/base/Widget.vue'
 import { mapGetters } from 'vuex'
 import { RedditAccountInfo } from '@/reddit'
-import { profileReddit } from '@/api'
+import { getRedditProfile } from '@/api'
 import { WidgetConfig } from '@/widgets'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
 
@@ -49,9 +49,7 @@ export default class Profile extends Vue {
     return !!this.redditProfile
   }
 
-  private update (): void {
-    profileReddit()
-  }
+  private update: () => void = getRedditProfile
 
   private configWidget = ProfileConfig
 

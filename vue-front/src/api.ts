@@ -181,7 +181,7 @@ export function statusReddit (): void {
   }
 }
 
-export function profileReddit (): void {
+export function getRedditProfile (): void {
   const config = getAuthConfig()
 
   if (config) {

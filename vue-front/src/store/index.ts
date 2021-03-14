@@ -74,12 +74,7 @@ function defaultStoreState (): StoreState {
   }
 }
 
-export interface Tab {
-  name: string;
-  icon: string;
-}
-
-export const tabs: Array<Tab> = [
+export const tabs = [
   { name: 'Home', icon: 'mdi-home' },
   { name: 'Services', icon: 'mdi-cog' },
 ]

@@ -3,7 +3,7 @@
     :loaded="posts !== []"
     :id="id"
     :refresh-timer="config.refresh"
-    :update-function="updateFunction"
+    :update-function="update"
     :configWidget="configWidget"
     :config="config"
   >
@@ -61,7 +61,7 @@ export default class Hots extends Vue {
   private dialog = false
   private dialogPost: PostData = emptyPostData()
 
-  private updateFunction (): void {
+  private update (): void {
     if (this.config.name !== undefined && this.config.number !== undefined) {
       getSubredditHots(this.config.name, this.config.number)
         .then(posts => {
