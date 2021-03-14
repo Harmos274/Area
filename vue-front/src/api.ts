@@ -61,6 +61,14 @@ function handleErrorSpotify (response: ErrorResponse): void {
   handleError(response)
 }
 
+function handleErrorGithub (response: ErrorResponse): void {
+  if (response.status === 403) {
+    store.commit('setGithubState', 'Unavailable')
+  }
+
+  handleError(response)
+}
+
 function getTokenConfig (): AxiosRequestConfig {
   const str = btoa(client.id + ':' + client.secret)
 
@@ -126,7 +134,7 @@ export function linkReddit (code: string): void {
   if (config) {
     store.commit('setRedditState', 'Loading')
 
-    axios.post('/reddit/link', { code }, config)
+    axios.put('/reddit/link', { code }, config)
       .then(() => store.commit('setRedditState', {}))
       .catch(handleErrorReddit)
   }
@@ -139,7 +147,7 @@ export function unlinkReddit (): void {
   if (config) {
     store.commit('setRedditState', 'Loading')
 
-    axios.post('/reddit/unlink', {}, config)
+    axios.put('/reddit/unlink', {}, config)
       .then(() => store.commit('setRedditState', 'LoggedOut'))
       .catch(error => {
         store.commit('setRedditState', initialState)
@@ -211,7 +219,7 @@ export function linkSpotify (code: string): void {
   if (config) {
     store.commit('setSpotifyState', 'Loading')
 
-    axios.post('/spotify/link', { code }, config)
+    axios.put('/spotify/link', { code }, config)
       .then(() => store.commit('setSpotifyState', {}))
       .catch(handleErrorSpotify)
   }
@@ -225,7 +233,7 @@ export function unlinkSpotify (): void {
 
     store.commit('setSpotifyState', 'Loading')
 
-    axios.post('/spotify/unlink', {}, config)
+    axios.put('/spotify/unlink', {}, config)
       .then(() => store.commit('setSpotifyState', 'LoggedOut'))
       .catch(error => {
         store.commit('setSpotifyState', initialState)
@@ -293,6 +301,89 @@ export async function getSpotifyShowPlayerSrc (uri: string): Promise<string | un
   }
 }
 
+export function linkGithub (code: string): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    store.commit('setGithubState', 'Loading')
+
+    axios.put('/github/link', { code }, config)
+      .then(() => store.commit('setGithubState', {}))
+      .catch(handleErrorGithub)
+  }
+}
+
+export function unlinkGithub (): void {
+  const config = getAuthConfig()
+  const initialState = store.getters.githubState
+
+  if (config) {
+    store.commit('setGithubState', 'Loading')
+
+    axios.put('/github/unlink', {}, config)
+      .then(() => store.commit('setGithubState', 'LoggedOut'))
+      .catch(error => {
+        store.commit('setGithubState', initialState)
+        handleErrorGithub(error)
+      })
+  }
+}
+
+export function statusGithub (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    const initialState = store.getters.githubState
+
+    store.commit('setGithubState', 'Loading')
+
+    axios.get('/github/status', config)
+      .then(response => {
+        const status = response.data as StatusResponse
+
+        if (status.logged_in) {
+          store.commit('setGithubState', {})
+        } else {
+          store.commit('setGithubState', 'LoggedOut')
+        }
+      })
+      .catch(error => {
+        store.commit('setGithubState', initialState)
+        handleErrorSpotify(error)
+      })
+  }
+}
+
+export function getGithubProfile (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get('/github/profile', config)
+      .then(response => store.commit('sumGithubState', { profile: response.data }))
+      .catch(handleErrorGithub)
+  }
+}
+
+export function getGithubSpotlights (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get('/github/spotlights', config)
+      .then(response => store.commit('sumGithubState', { spotlights: response.data }))
+      .catch(handleErrorGithub)
+  }
+}
+
+export function getGithubIssues (): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    axios.get('/github/issues', config)
+      .then(response => store.commit('sumGithubState', { issues: response.data }))
+      .catch(handleErrorGithub)
+  }
+}
+
 export function addWidget (type_name: WidgetName, config: WidgetConfig): void {
   const axios_config = getAuthConfig()
 
@@ -340,5 +431,6 @@ export async function setWidgetConfig (id: number, config: WidgetConfig): Promis
 export function loadApp (): void {
   statusReddit()
   statusSpotify()
+  statusGithub()
   getWidgets()
 }

@@ -11,6 +11,7 @@ import Services from '@/views/Services.vue'
 import Callbacks from '@/views/callbacks/Index.vue'
 import RedditCallback from '@/views/callbacks/Reddit.vue'
 import SpotifyCallback from '@/views/callbacks/Spotify.vue'
+import GithubCallback from '@/views/callbacks/Github.vue'
 
 Vue.use(VueRouter)
 
@@ -47,6 +48,11 @@ const routes: Array<RouteConfig> = [
             path: 'spotify',
             name: 'Spotify Callback',
             component: SpotifyCallback,
+          },
+          {
+            path: 'github',
+            name: 'Github Callback',
+            component: GithubCallback,
           },
         ],
       },

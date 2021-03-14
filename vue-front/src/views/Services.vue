@@ -19,6 +19,7 @@ import { Component, Vue } from 'vue-property-decorator'
 import Service from '@/components/base/Service.vue'
 import { RedditService } from '@/reddit'
 import { SpotifyService } from '@/spotify'
+import { GithubService } from '@/github'
 import store from '@/store'
 
 @Component({
@@ -31,6 +32,7 @@ export default class Services extends Vue {
     return [
       { desc: RedditService, status: store.getters.redditStatus },
       { desc: SpotifyService, status: store.getters.spotifyStatus },
+      { desc: GithubService, status: store.getters.githubStatus },
     ]
   }
 }

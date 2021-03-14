@@ -4,6 +4,7 @@ import VuexPersist from 'vuex-persist'
 import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@/widgets'
 import { RedditState, RedditAccountInfo, PostData, Spotlight } from '@/reddit'
 import { SpotifyState } from '@/spotify'
+import { GithubState, GithubRepo } from '@/github'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ function reduceUserData (data: ResourceState<UserData>): ResourceState<UserData>
     return {
       reddit: 'Unknown',
       spotify: 'Unknown',
+      github: 'Unknown',
 
       widgets: [],
 
@@ -49,6 +51,7 @@ export interface WidgetCreator {
 interface UserData {
   reddit: ResourceState<RedditState>;
   spotify: ResourceState<SpotifyState>;
+  github: ResourceState<GithubState>;
 
   widgets: Array<Widget>;
 
@@ -127,6 +130,17 @@ export default new Vuex.Store({
       }
     },
 
+    setGithubState (state, payload: GithubState) {
+      if (typeof state.userData === 'object') {
+        state.userData.github = payload
+      }
+    },
+    sumGithubState (state, payload: GithubState) {
+      if (typeof state.userData === 'object' && typeof state.userData.github === 'object') {
+        state.userData.github = { ...state.userData.github, ...payload }
+      }
+    },
+
     setWidgets (state, widgets: Array<Widget>) {
       if (typeof state.userData === 'object') {
         state.userData.widgets = widgets
@@ -169,6 +183,9 @@ export default new Vuex.Store({
     spotifyStatus: (state, getters): ServiceStatus => {
       return getServiceStatus(getters.spotifyState)
     },
+    githubStatus: (state, getters): ServiceStatus => {
+      return getServiceStatus(getters.githubState)
+    },
 
     redditState: (state): ResourceState<RedditState> => {
       if (typeof state.userData === 'object') {
@@ -196,6 +213,21 @@ export default new Vuex.Store({
         return state.userData.spotify
       } else {
         return 'Unavailable'
+      }
+    },
+
+    githubState: (state): ResourceState<GithubState> => {
+      if (typeof state.userData === 'object') {
+        return state.userData.github
+      } else {
+        return 'Unavailable'
+      }
+    },
+    githubSpotlights: (state): GithubRepo[] | undefined => {
+      if (typeof state.userData === 'object' && typeof state.userData.github === 'object') {
+        return state.userData.github.spotlights
+      } else {
+        return undefined
       }
     },
 
