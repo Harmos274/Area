@@ -13,13 +13,13 @@
 
     <v-card-text>
       <v-container class="grow">
-        <v-row v-for="[index, widget] in service.widgets.entries()" v-bind:key="index" align="center">
+        <v-row v-for="[index, widget] in description.widgets.entries()" v-bind:key="index" align="center">
           <div> {{ widget.description }} </div>
 
           <v-spacer />
 
           <v-btn
-            :color="service.brandColor"
+            :color="description.brandColor"
             icon
             :disabled="!isLoggedIn"
             @click="openModal(index)"
@@ -39,7 +39,7 @@
         block
         :loading="isLoading"
         :disabled="isLoading"
-        :color="service.brandColor"
+        :color="description.brandColor"
         @click="signIn"
       >
         Sign in
@@ -50,7 +50,7 @@
         text
         block
         color="red"
-        @click="service.unLink"
+        @click="description.unLink"
       >
         Disconnect
       </v-btn>
@@ -69,7 +69,7 @@ import { Component, Prop } from 'vue-property-decorator'
 import { mapMutations } from 'vuex'
 import { ServiceStatus } from '@/store'
 import Empty from '@/components/Empty.vue'
-import { ServiceDescription } from '@/service'
+import { ServiceDescription, Service } from '@/service'
 import { WidgetName, WidgetConfig } from '@/widgets'
 import { addWidget } from '@/api'
 
@@ -78,7 +78,7 @@ import { addWidget } from '@/api'
     ...mapMutations(['addWidget']),
   },
 })
-export default class Service extends Vue {
+export default class ServiceWidget extends Vue {
   addWidget!: (name: string) => void;
 
   private dialog = false
@@ -90,30 +90,30 @@ export default class Service extends Vue {
   }
 
   get headerSrc () {
-    return this.$vuetify.theme.dark ? this.service.headerSrcDark : this.service.headerSrcLight
+    return this.$vuetify.theme.dark ? this.description.headerSrcDark : this.description.headerSrcLight
   }
 
   get isLoggedIn () {
-    return this.status === ServiceStatus.LoggedIn
+    return this.$store.getters.serviceStatus(this.service) === ServiceStatus.LoggedIn
   }
 
   get isLoading () {
-    return this.status === ServiceStatus.Loading
+    return this.$store.getters.serviceStatus(this.service) === ServiceStatus.Loading
   }
 
   private signIn (): void {
-    window.location.href = this.service.authUrlMethod().href
+    window.location.href = this.description.authUrlMethod().href
   }
 
   private openModal (index: number): void {
-    this.dialogWidget = this.service.widgets[index].creationDialog
+    this.dialogWidget = this.description.widgets[index].creationDialog
     this.dialog = true
   }
 
   @Prop({ required: true })
-  service!: ServiceDescription
+  description!: ServiceDescription
 
   @Prop({ required: true })
-  status!: ServiceStatus
+  service!: Service
 }
 </script>

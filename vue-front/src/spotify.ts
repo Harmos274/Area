@@ -1,5 +1,5 @@
 import { baseSelfUrl } from '@/definitions'
-import { unlinkSpotify } from '@/api'
+import { unlinkService } from '@/api'
 import { ServiceDescription } from '@/service'
 import ProfileConfig from '@/components/widgets/spotify/ProfileConfig.vue'
 import PlayerConfig from '@/components/widgets/spotify/PlayerConfig.vue'
@@ -29,7 +29,7 @@ export const SpotifyService: ServiceDescription = {
   headerSrcDark: require('@/assets/Spotify_Logo_Green.png'),
   brandColor: '#1DB954',
   authUrlMethod: getUrl,
-  unLink: unlinkSpotify,
+  unLink: () => unlinkService('spotify'),
   widgets: [
     { description: 'Profile', creationDialog: ProfileConfig },
     { description: 'Player', creationDialog: PlayerConfig },

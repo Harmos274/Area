@@ -1,5 +1,5 @@
 import { baseSelfUrl } from '@/definitions'
-import { unlinkReddit } from '@/api'
+import { unlinkService } from '@/api'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
 import HotsConfig from '@/components/widgets/reddit/HotsConfig.vue'
 import { ServiceDescription } from '@/service'
@@ -30,7 +30,7 @@ export const RedditService: ServiceDescription = {
   headerSrcDark: require('@/assets/Reddit_Lockup_OnDark.png'),
   brandColor: '#FF4500',
   authUrlMethod: getUrl,
-  unLink: unlinkReddit,
+  unLink: () => unlinkService('reddit'),
   widgets: [
     { description: 'Profile', creationDialog: ProfileConfig },
     { description: 'Subreddit', creationDialog: HotsConfig },

@@ -1,6 +1,6 @@
 import { baseSelfUrl } from '@/definitions'
 import { ServiceDescription } from '@/service'
-import { unlinkGithub } from '@/api'
+import { unlinkService } from '@/api'
 import ProfileConfig from '@/components/widgets/github/ProfileConfig.vue'
 import SpotlightsConfig from '@/components/widgets/github/SpotlightsConfig.vue'
 import IssuesConfig from '@/components/widgets/github/IssuesConfig.vue'
@@ -28,7 +28,7 @@ export const GithubService: ServiceDescription = {
   headerSrcDark: require('@/assets/Github_Logo_OnDark.png'),
   brandColor: '#4078c0',
   authUrlMethod: getUrl,
-  unLink: unlinkGithub,
+  unLink: () => unlinkService('github'),
   widgets: [
     { description: 'Profile', creationDialog: ProfileConfig },
     { description: 'Spotlights', creationDialog: SpotlightsConfig },

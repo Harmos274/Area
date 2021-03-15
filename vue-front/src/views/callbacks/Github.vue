@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-import { linkGithub } from '@/api'
+import { linkService } from '@/api'
 
 @Component
 export default class GithubCallback extends Vue {
@@ -13,7 +13,7 @@ export default class GithubCallback extends Vue {
     const code = this.$route.query.code
 
     if (state === 'croacroa' && typeof code === 'string') {
-      linkGithub(code)
+      linkService('github', code)
     } else {
       console.log('Github callback: Invalid arguments')
     }

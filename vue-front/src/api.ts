@@ -1,8 +1,9 @@
 import axios, { AxiosRequestConfig } from 'axios'
-import store from '@/store'
+import store, { ResourceState } from '@/store'
 import { getWidget, WidgetConfig, WidgetName } from '@/widgets'
 import router from '@/router'
 import { PostData } from '@/reddit'
+import { Service } from '@/service'
 
 const client = {
   id: 'vue-front',
@@ -45,28 +46,24 @@ function handleError (response: ErrorResponse): void {
   }
 }
 
-function handleErrorReddit (response: ErrorResponse): void {
+function handleServiceError (service: Service, response: ErrorResponse): void {
   if (response.status === 403) {
-    store.commit('setRedditState', 'Unavailable')
+    store.commit('setServiceState', { service, payload: 'Unavailable' })
   }
 
   handleError(response)
+}
+
+function handleErrorReddit (response: ErrorResponse): void {
+  handleServiceError('reddit', response)
 }
 
 function handleErrorSpotify (response: ErrorResponse): void {
-  if (response.status === 403) {
-    store.commit('setSpotifyState', 'Unavailable')
-  }
-
-  handleError(response)
+  handleServiceError('spotify', response)
 }
 
 function handleErrorGithub (response: ErrorResponse): void {
-  if (response.status === 403) {
-    store.commit('setGithubState', 'Unavailable')
-  }
-
-  handleError(response)
+  handleServiceError('github', response)
 }
 
 function getTokenConfig (): AxiosRequestConfig {
@@ -128,59 +125,58 @@ function getAuthConfig (): AxiosRequestConfig | undefined {
   return undefined
 }
 
-export function linkReddit (code: string): void {
+export function getServiceStatus (service: Service): void {
   const config = getAuthConfig()
 
   if (config) {
-    store.commit('setRedditState', 'Loading')
+    const initialState = store.getters.serviceState(service)
 
-    axios.put('/reddit/link', { code }, config)
-      .then(() => store.commit('setRedditState', {}))
-      .catch(handleErrorReddit)
-  }
-}
+    store.commit('setServiceState', { service, payload: 'Loading' })
 
-export function unlinkReddit (): void {
-  const config = getAuthConfig()
-  const initialState = store.getters.redditState
-
-  if (config) {
-    store.commit('setRedditState', 'Loading')
-
-    axios.put('/reddit/unlink', {}, config)
-      .then(() => store.commit('setRedditState', 'LoggedOut'))
-      .catch(error => {
-        store.commit('setRedditState', initialState)
-        handleErrorReddit(error)
-      })
-  }
-}
-
-export function statusReddit (): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    const initialState = store.getters.redditState
-
-    store.commit('setRedditState', 'Loading')
-
-    axios.get('/reddit/status', config)
+    axios.get(`/${service}/status`, config)
       .then(response => {
         const status = response.data as StatusResponse
+        let payload: ResourceState<{}> = 'LoggedOut'
 
         if (status.logged_in) {
-          store.commit('setRedditState', {})
-        } else {
-          store.commit('setRedditState', 'LoggedOut')
+          payload = {}
         }
+        store.commit('setServiceState', { service, payload })
       })
-      .catch((error) => {
-        store.commit('setRedditState', initialState)
-        handleErrorReddit(error)
+      .catch(error => {
+        store.commit('setServiceState', { service, payload: initialState })
+        handleServiceError(service, error)
       })
   }
 }
 
+export function linkService (service: Service, code: string): void {
+  const config = getAuthConfig()
+
+  if (config) {
+    store.commit('setServiceState', { service, payload: 'Loading' })
+
+    axios.put(`/${service}/link`, { code }, config)
+      .then(() => store.commit('setServiceState', { service, payload: {} }))
+      .catch(error => handleServiceError(service, error))
+  }
+}
+
+export function unlinkService (service: Service): void {
+  const config = getAuthConfig()
+  const initialState = store.getters.serviceState(service)
+
+  if (config) {
+    store.commit('setServiceState', { service, payload: 'Loading' })
+
+    axios.put(`/${service}/unlink`, {}, config)
+      .then(() => store.commit('setServiceState', { service, payload: 'LoggedOut' }))
+      .catch(error => {
+        store.commit('setServiceState', { service, payload: initialState })
+        handleServiceError(service, error)
+      })
+  }
+}
 export function getRedditProfile (): void {
   const config = getAuthConfig()
 
@@ -199,7 +195,7 @@ export async function getSubredditHots (subreddit: string, nbr: number): Promise
       .then(response => response.data)
       .catch(handleErrorReddit)
   } else {
-    return new Promise(resolve => resolve(undefined))
+    return undefined
   }
 }
 
@@ -212,61 +208,6 @@ export function getRedditSpotlights (): void {
       .catch(handleErrorReddit)
   }
 }
-
-export function linkSpotify (code: string): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    store.commit('setSpotifyState', 'Loading')
-
-    axios.put('/spotify/link', { code }, config)
-      .then(() => store.commit('setSpotifyState', {}))
-      .catch(handleErrorSpotify)
-  }
-}
-
-export function unlinkSpotify (): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    const initialState = store.getters.spotifyState
-
-    store.commit('setSpotifyState', 'Loading')
-
-    axios.put('/spotify/unlink', {}, config)
-      .then(() => store.commit('setSpotifyState', 'LoggedOut'))
-      .catch(error => {
-        store.commit('setSpotifyState', initialState)
-        handleErrorSpotify(error)
-      })
-  }
-}
-
-export function statusSpotify (): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    const initialState = store.getters.spotifyState
-
-    store.commit('setSpotifyState', 'Loading')
-
-    axios.get('/spotify/status', config)
-      .then(response => {
-        const status = response.data as StatusResponse
-
-        if (status.logged_in) {
-          store.commit('setSpotifyState', {})
-        } else {
-          store.commit('setSpotifyState', 'LoggedOut')
-        }
-      })
-      .catch(error => {
-        store.commit('setSpotifyState', initialState)
-        handleErrorSpotify(error)
-      })
-  }
-}
-
 export function getSpotifyProfile (): void {
   const config = getAuthConfig()
 
@@ -300,60 +241,6 @@ export async function getSpotifyShowPlayerSrc (uri: string): Promise<string | un
     return new Promise(resolve => resolve(undefined))
   }
 }
-
-export function linkGithub (code: string): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    store.commit('setGithubState', 'Loading')
-
-    axios.put('/github/link', { code }, config)
-      .then(() => store.commit('setGithubState', {}))
-      .catch(handleErrorGithub)
-  }
-}
-
-export function unlinkGithub (): void {
-  const config = getAuthConfig()
-  const initialState = store.getters.githubState
-
-  if (config) {
-    store.commit('setGithubState', 'Loading')
-
-    axios.put('/github/unlink', {}, config)
-      .then(() => store.commit('setGithubState', 'LoggedOut'))
-      .catch(error => {
-        store.commit('setGithubState', initialState)
-        handleErrorGithub(error)
-      })
-  }
-}
-
-export function statusGithub (): void {
-  const config = getAuthConfig()
-
-  if (config) {
-    const initialState = store.getters.githubState
-
-    store.commit('setGithubState', 'Loading')
-
-    axios.get('/github/status', config)
-      .then(response => {
-        const status = response.data as StatusResponse
-
-        if (status.logged_in) {
-          store.commit('setGithubState', {})
-        } else {
-          store.commit('setGithubState', 'LoggedOut')
-        }
-      })
-      .catch(error => {
-        store.commit('setGithubState', initialState)
-        handleErrorSpotify(error)
-      })
-  }
-}
-
 export function getGithubProfile (): void {
   const config = getAuthConfig()
 
@@ -429,8 +316,8 @@ export async function setWidgetConfig (id: number, config: WidgetConfig): Promis
 }
 
 export function loadApp (): void {
-  statusReddit()
-  statusSpotify()
-  statusGithub()
+  getServiceStatus('reddit')
+  getServiceStatus('spotify')
+  getServiceStatus('github')
   getWidgets()
 }

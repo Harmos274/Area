@@ -5,6 +5,7 @@ import { Widget, WidgetConstructor, getWidgetConstructor, WidgetConfig } from '@
 import { RedditState, RedditAccountInfo, PostData, Spotlight } from '@/reddit'
 import { SpotifyState } from '@/spotify'
 import { GithubState, GithubRepo } from '@/github'
+import { Service } from '@/service'
 
 Vue.use(Vuex)
 
@@ -104,9 +105,9 @@ export default new Vuex.Store({
     setAreaState (state, payload: ResourceState<UserData>) {
       state.userData = payload
     },
-    setRedditState (state, payload: ResourceState<RedditState>) {
+    setServiceState (state, { service, payload }: { service: Service; payload: ResourceState<{}> }) {
       if (typeof state.userData === 'object') {
-        state.userData.reddit = payload
+        state.userData[service] = payload
       }
     },
     sumRedditState (state, payload: RedditState) {
@@ -114,20 +115,9 @@ export default new Vuex.Store({
         state.userData.reddit = { ...state.userData.reddit, ...payload }
       }
     },
-    setSpotifyState (state, payload: ResourceState<SpotifyState>) {
-      if (typeof state.userData === 'object') {
-        state.userData.spotify = payload
-      }
-    },
     sumSpotifyState (state, payload: SpotifyState) {
       if (typeof state.userData === 'object' && typeof state.userData.spotify === 'object') {
         state.userData.spotify = { ...state.userData.spotify, ...payload }
-      }
-    },
-
-    setGithubState (state, payload: GithubState) {
-      if (typeof state.userData === 'object') {
-        state.userData.github = payload
       }
     },
     sumGithubState (state, payload: GithubState) {
@@ -172,19 +162,13 @@ export default new Vuex.Store({
     areaStatus: (state): ServiceStatus => {
       return getServiceStatus(state.userData)
     },
-    redditStatus: (state, getters): ServiceStatus => {
-      return getServiceStatus(getters.redditState)
-    },
-    spotifyStatus: (state, getters): ServiceStatus => {
-      return getServiceStatus(getters.spotifyState)
-    },
-    githubStatus: (state, getters): ServiceStatus => {
-      return getServiceStatus(getters.githubState)
+    serviceStatus: (state, getters) => (service: Service): ServiceStatus => {
+      return getServiceStatus(getters.serviceState(service))
     },
 
-    redditState: (state): ResourceState<RedditState> => {
+    serviceState: (state) => (service: Service) => {
       if (typeof state.userData === 'object') {
-        return state.userData.reddit
+        return state.userData[service]
       } else {
         return 'Unavailable'
       }
@@ -203,21 +187,9 @@ export default new Vuex.Store({
         return undefined
       }
     },
-    spotifyState: (state): ResourceState<SpotifyState> => {
-      if (typeof state.userData === 'object') {
-        return state.userData.spotify
-      } else {
-        return 'Unavailable'
-      }
-    },
+    spotifyState: (state, getters): ResourceState<SpotifyState> => getters.serviceState('spotify'),
 
-    githubState: (state): ResourceState<GithubState> => {
-      if (typeof state.userData === 'object') {
-        return state.userData.github
-      } else {
-        return 'Unavailable'
-      }
-    },
+    githubState: (state, getters): ResourceState<GithubState> => getters.serviceState('github'),
     githubSpotlights: (state): GithubRepo[] | undefined => {
       if (typeof state.userData === 'object' && typeof state.userData.github === 'object') {
         return state.userData.github.spotlights
