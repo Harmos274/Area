@@ -10,7 +10,7 @@
     <template #title>
       {{ title }}
       <v-spacer />
-      <v-avatar size="32px"><v-img :src="content.icon_url" /></v-avatar>
+      <v-avatar size="32px"><v-img :src="avatarUrl" /></v-avatar>
     </template>
     <v-list>
       <v-list-item>
@@ -32,6 +32,7 @@ import { RedditAccountInfo } from '@/reddit'
 import { getRedditProfile } from '@/api'
 import { WidgetConfig } from '@/widgets'
 import ProfileConfig from '@/components/widgets/reddit/ProfileConfig.vue'
+import { avatar_fallback_url } from '@/definitions'
 
 @Component({
   components: {
@@ -72,6 +73,10 @@ export default class Profile extends Vue {
         comment_karma: 0,
       }
     }
+  }
+
+  private get avatarUrl (): string {
+    return this.content.icon_url || avatar_fallback_url
   }
 
   @Prop({ required: true })

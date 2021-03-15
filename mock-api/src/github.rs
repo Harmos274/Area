@@ -40,8 +40,6 @@ async fn link(
 ) -> Response<()> {
     let LinkData { code } = request.0;
 
-    println!("{}", code);
-
     data.map_to_user_mut(auth.token(), |user| {
         user.github = Some(code);
 

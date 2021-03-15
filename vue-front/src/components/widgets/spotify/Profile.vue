@@ -10,7 +10,7 @@
     <template #title>
       {{ title }}
       <v-spacer />
-      <v-avatar size="32px"><v-img :src="content.icon_url" /></v-avatar>
+      <v-avatar size="32px"><v-img :src="avatarUrl" /></v-avatar>
     </template>
     <v-list>
       <v-list-item>
@@ -33,6 +33,7 @@ import { WidgetConfig } from '@/widgets'
 import ProfileConfig from '@/components/widgets/spotify/ProfileConfig.vue'
 import { SpotifyProfile, SpotifyState } from '@/spotify'
 import { ResourceState } from '@/store'
+import { avatar_fallback_url } from '@/definitions'
 
 @Component({
   components: {
@@ -81,6 +82,10 @@ export default class Profile extends Vue {
         is_premium: false,
       }
     }
+  }
+
+  private get avatarUrl (): string {
+    return this.content.icon_url || avatar_fallback_url
   }
 
   @Prop({ required: true })

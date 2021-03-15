@@ -24,3 +24,5 @@ export const baseApiUrl = getBaseApiUrl()
 export const baseSelfUrl = getBaseSelfUrl()
 
 export const stateString = process.env.VUE_APP_SERVICES_STATE || 'croacroa'
+
+export const avatar_fallback_url = 'https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png'

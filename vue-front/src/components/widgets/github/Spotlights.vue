@@ -16,7 +16,7 @@
           @click="spotlightSelected(index)"
         >
           <v-list-item-avatar>
-            <v-img :src="spotlight.owner.avatar_url" />
+            <v-img :src="getAvatarUrl(index)" />
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -69,6 +69,7 @@ import { getGithubSpotlights } from '@/api'
 import { GithubRepo, emptyRepo } from '@/github'
 import { mapGetters } from 'vuex'
 import SpotlightsConfig from '@/components/widgets/github/SpotlightsConfig.vue'
+import { avatar_fallback_url } from '@/definitions'
 
 @Component({
   components: { Widget },
@@ -95,6 +96,10 @@ export default class Spotlights extends Vue {
     } else {
       return []
     }
+  }
+
+  private getAvatarUrl (index: number): string {
+    return this.content[index].owner.avatar_url || avatar_fallback_url
   }
 
   private spotlightSelected (index: number): void {

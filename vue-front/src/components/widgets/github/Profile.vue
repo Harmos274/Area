@@ -10,7 +10,7 @@
     <template #title>
       {{ title }}
       <v-spacer />
-      <v-avatar size="32px"><v-img :src="content.avatar_url" /></v-avatar>
+      <v-avatar size="32px"><v-img :src="avatarUrl" /></v-avatar>
     </template>
     <v-list>
       <v-list-item>
@@ -35,6 +35,7 @@ import { getGithubProfile } from '@/api'
 import { WidgetConfig } from '@/widgets'
 import ProfileConfig from '@/components/widgets/github/ProfileConfig.vue'
 import { ResourceState } from '@/store'
+import { avatar_fallback_url } from '@/definitions'
 
 @Component({
   components: {
@@ -68,6 +69,10 @@ export default class Profile extends Vue {
     } else {
       return emptyGithubProfile
     }
+  }
+
+  private get avatarUrl (): string {
+    return this.content.avatar_url || avatar_fallback_url
   }
 
   @Prop({ required: true })

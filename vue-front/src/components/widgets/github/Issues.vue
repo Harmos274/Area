@@ -70,7 +70,7 @@
           >
             <template #default="{ on }">
               <v-avatar v-on="on" size="32" class="ma-1">
-                <v-img :src="user.avatar_url" />
+                <v-img :src="getAvatarUrl(user.avatar_url)" />
               </v-avatar>
             </template>
           </user-menu>
@@ -93,6 +93,7 @@ import { mapGetters } from 'vuex'
 import IssuesConfig from '@/components/widgets/github/IssuesConfig.vue'
 import { ResourceState } from '@/store'
 import UserMenu from '@/components/widgets/github/UserMenu.vue'
+import { avatar_fallback_url } from '@/definitions'
 
 @Component({
   components: { UserMenu, Widget },
@@ -119,6 +120,10 @@ export default class Issues extends Vue {
     } else {
       return []
     }
+  }
+
+  private getAvatarUrl (url: string | undefined): string {
+    return url || avatar_fallback_url
   }
 
   private spotlightSelected (index: number): void {
