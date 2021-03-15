@@ -47,7 +47,7 @@ export default class Widget extends Vue {
   created () {
     this.updateFunction()
 
-    if (this.refreshTimer && this.refreshTimer > 0) {
+    if (this.refreshTimer !== undefined && this.refreshTimer > 0) {
       this.intervalId = setInterval(
         this.updateFunction, 60 * this.refreshTimer,
       )
@@ -55,7 +55,7 @@ export default class Widget extends Vue {
   }
 
   destroyed () {
-    if (this.intervalId !== undefined) {
+    if (this.intervalId !== undefined && this.refreshTimer > 0) {
       clearInterval(this.intervalId)
     }
   }

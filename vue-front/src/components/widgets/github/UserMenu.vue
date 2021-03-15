@@ -3,7 +3,7 @@
     v-model="menu"
     transition="scale-transition"
   >
-    <template v-slot:activator="{ on }">
+    <template #activator="{ on }">
       <slot v-bind:on="on" />
     </template>
 

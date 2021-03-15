@@ -59,7 +59,6 @@ export default class Player extends Vue {
     if (src !== undefined) {
       this.iframe_src = src
       this.url_loaded = true
-      console.log(src)
     } else {
       this.iframe_loaded = false
     }

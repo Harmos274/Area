@@ -7,7 +7,7 @@
     :configWidget="configWidget"
     :config="config"
   >
-    <template v-slot:title>
+    <template #title>
       {{ title }}
       <v-spacer />
       <v-avatar size="32px"><v-img :src="content.avatar_url" /></v-avatar>

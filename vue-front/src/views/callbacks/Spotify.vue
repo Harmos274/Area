@@ -1,10 +1,11 @@
 <template>
-  <div id="spotifycallback" />
+  <div />
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { linkService } from '@/api'
+import { stateString } from '@/definitions'
 
 @Component
 export default class SpotifyCallback extends Vue {
@@ -12,7 +13,7 @@ export default class SpotifyCallback extends Vue {
     const state = this.$route.query.state
     const code = this.$route.query.code
 
-    if (state === 'croacroa' && typeof code === 'string') {
+    if (state === stateString && typeof code === 'string') {
       linkService('spotify', code)
     } else {
       console.log('Spotify callback: Invalid arguments')

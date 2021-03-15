@@ -7,7 +7,7 @@
     :configWidget="configWidget"
     :config="config"
   >
-    <template v-slot:title>Reddit's spotlights</template>
+    <template #title>Reddit's spotlights</template>
     <v-list flat two-line>
       <v-list-item-group>
         <v-list-item
@@ -94,7 +94,7 @@ export default class Spotlights extends Vue {
   }
 
   private visit () {
-    window.open(`https://reddit.com/r/${this.dialogSpotlight.name}`)
+    window.open(`https://reddit.com/${this.dialogSpotlight.url}`)
   }
 
   @Prop({ required: true })

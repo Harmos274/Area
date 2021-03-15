@@ -1,8 +1,8 @@
 import { WidgetCreator } from '@/store'
 
 export interface ServiceDescription {
-  headerSrcLight: string;
-  headerSrcDark: string;
+  headerImageLight: string;
+  headerImageDark: string;
   brandColor: string;
   authUrlMethod: () => URL;
   unLink: () => void;

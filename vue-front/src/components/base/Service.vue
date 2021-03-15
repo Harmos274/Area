@@ -90,7 +90,7 @@ export default class ServiceWidget extends Vue {
   }
 
   get headerSrc () {
-    return this.$vuetify.theme.dark ? this.description.headerSrcDark : this.description.headerSrcLight
+    return this.$vuetify.theme.dark ? this.description.headerImageDark : this.description.headerImageLight
   }
 
   get isLoggedIn () {

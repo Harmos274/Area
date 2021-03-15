@@ -52,6 +52,14 @@ services:
         build: vue-front
         ports:
             - 8080:80
+        environment:
+            - HOST=${FRONT_HOST}
+            - PORT=${FRONT_PORT}
+            - API_HOST
+            - API_PORT
+            - REDDIT_CLIENT_ID
+            - GITHUB_CLIENT_ID
+            - SPOTIFY_CLIENT_ID
         restart: on-failure
         profiles: ["front", "production"]
 

@@ -1,10 +1,11 @@
 <template>
-  <div id="redditcallback" />
+  <div />
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import { linkService } from '@/api'
+import { stateString } from '@/definitions'
 
 @Component
 export default class RedditCallback extends Vue {
@@ -12,7 +13,7 @@ export default class RedditCallback extends Vue {
     const state = this.$route.query.state
     const code = this.$route.query.code
 
-    if (state === 'croacroa' && typeof code === 'string') {
+    if (state === stateString && typeof code === 'string') {
       linkService('reddit', code)
     } else {
       console.log('Reddit callback: Invalid arguments')

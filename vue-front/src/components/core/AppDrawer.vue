@@ -25,7 +25,7 @@
       </v-list-item-group>
     </v-list>
 
-    <template v-slot:append>
+    <template #append>
       <v-list>
         <v-list-item>
           <light-dark-switch justify="center" />

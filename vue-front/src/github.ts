@@ -1,4 +1,4 @@
-import { baseSelfUrl } from '@/definitions'
+import { baseSelfUrl, stateString } from '@/definitions'
 import { ServiceDescription } from '@/service'
 import { unlinkService } from '@/api'
 import ProfileConfig from '@/components/widgets/github/ProfileConfig.vue'
@@ -6,7 +6,7 @@ import SpotlightsConfig from '@/components/widgets/github/SpotlightsConfig.vue'
 import IssuesConfig from '@/components/widgets/github/IssuesConfig.vue'
 
 const client = {
-  id: '22d3c289a00c01c981d9',
+  id: process.env.VUE_APP_GITHUB_CLIENT_ID || '22d3c289a00c01c981d9',
   redirect: `${baseSelfUrl}/callbacks/github`,
   authUrlBase: 'https://github.com/login/oauth/authorize',
   scopes: ['read:user', 'repo'],
@@ -18,14 +18,14 @@ export function getUrl (): URL {
   authUrl.searchParams.append('client_id', client.id)
   authUrl.searchParams.append('redirect_uri', client.redirect)
   authUrl.searchParams.append('scope', client.scopes.join(' '))
-  authUrl.searchParams.append('state', 'croacroa')
+  authUrl.searchParams.append('state', stateString)
 
   return authUrl
 }
 
 export const GithubService: ServiceDescription = {
-  headerSrcLight: require('@/assets/Github_Logo_OnWhite.png'),
-  headerSrcDark: require('@/assets/Github_Logo_OnDark.png'),
+  headerImageLight: require('@/assets/Github_Logo_OnWhite.png'),
+  headerImageDark: require('@/assets/Github_Logo_OnDark.png'),
   brandColor: '#4078c0',
   authUrlMethod: getUrl,
   unLink: () => unlinkService('github'),

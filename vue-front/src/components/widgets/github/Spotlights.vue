@@ -7,7 +7,7 @@
     :configWidget="configWidget"
     :config="config"
   >
-    <template v-slot:title>Github's spotlights</template>
+    <template #title>Github's spotlights</template>
     <v-list flat two-line>
       <v-list-item-group>
         <v-list-item
@@ -15,6 +15,10 @@
           v-bind:key="index"
           @click="spotlightSelected(index)"
         >
+          <v-list-item-avatar>
+            <v-img :src="spotlight.owner.avatar_url" />
+          </v-list-item-avatar>
+
           <v-list-item-content>
             <v-list-item-title>
               {{ spotlight.name }}

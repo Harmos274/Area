@@ -226,7 +226,7 @@ export async function getSpotifyPlayerSrc (uri: string): Promise<string | undefi
       .then(response => response.data.url)
       .catch(handleErrorSpotify)
   } else {
-    return new Promise(resolve => resolve(undefined))
+    return undefined
   }
 }
 
@@ -238,7 +238,7 @@ export async function getSpotifyShowPlayerSrc (uri: string): Promise<string | un
       .then(response => response.data.url)
       .catch(handleErrorSpotify)
   } else {
-    return new Promise(resolve => resolve(undefined))
+    return undefined
   }
 }
 export function getGithubProfile (): void {

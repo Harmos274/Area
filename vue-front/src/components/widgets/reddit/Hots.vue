@@ -7,7 +7,7 @@
     :configWidget="configWidget"
     :config="config"
   >
-    <template v-slot:title>{{ title }}</template>
+    <template #title>{{ title }}</template>
     <v-list flat two-line>
       <v-list-item-group>
         <v-list-item
@@ -37,6 +37,9 @@
           <br />
           <template v-if="dialogPost.selftext">{{ dialogPost.selftext }}</template>
         </v-card-text>
+        <v-card-actions>
+          <v-btn block @click="visit">Open</v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
   </widget>
@@ -85,6 +88,10 @@ export default class Hots extends Vue {
       this.dialogPost = this.posts[index]
       this.dialog = true
     }
+  }
+
+  private visit () {
+    window.open(this.dialogPost.url)
   }
 
   @Prop({ required: true })

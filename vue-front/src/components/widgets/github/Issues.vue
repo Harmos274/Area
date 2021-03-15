@@ -7,7 +7,7 @@
     :configWidget="configWidget"
     :config="config"
   >
-    <template v-slot:title>Github issues</template>
+    <template #title>Github issues</template>
     <v-list flat two-line>
       <v-list-item-group>
         <v-list-item
@@ -41,7 +41,7 @@
             v-bind:key="index"
             top
           >
-            <template v-slot:activator="{ on, attrs }">
+            <template #activator="{ on, attrs }">
               <v-chip
                 :color="`#${label.color}`"
                 class="ml-2"
@@ -68,7 +68,7 @@
             v-bind:key="index"
             :user="user"
           >
-            <template v-slot:default="{ on }">
+            <template #default="{ on }">
               <v-avatar v-on="on" size="32" class="ma-1">
                 <v-img :src="user.avatar_url" />
               </v-avatar>
