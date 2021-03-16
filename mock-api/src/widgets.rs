@@ -74,7 +74,7 @@ fn type_from_name(name: &str) -> Option<&'static WidgetType> {
     WIDGETS.iter().find(|widget| widget.name == name)
 }
 
-const WIDGETS: [WidgetType; 6] = [
+const WIDGETS: [WidgetType; 9] = [
     WidgetType {
         name: "reddit_profile",
         configurable: false,
@@ -98,6 +98,18 @@ const WIDGETS: [WidgetType; 6] = [
     WidgetType {
         name: "spotify_podcast",
         configurable: true,
+    },
+    WidgetType {
+        name: "github_profile",
+        configurable: false,
+    },
+    WidgetType {
+        name: "github_spotlights",
+        configurable: false,
+    },
+    WidgetType {
+        name: "github_issues",
+        configurable: false,
     },
 ];
 

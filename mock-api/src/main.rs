@@ -1,5 +1,6 @@
 mod arguments;
 mod data;
+mod github;
 mod oauth;
 mod reddit;
 mod responses;
@@ -39,6 +40,7 @@ async fn main() -> std::io::Result<()> {
             })
             .service(oauth::service())
             .service(reddit::service())
+            .service(github::service())
             .service(spotify::service())
             .service(widgets::service())
     })

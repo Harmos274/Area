@@ -39,6 +39,7 @@ async fn register(data: web::Data<AppData>, request: web::Json<RegisterData>) ->
                     username,
                     password,
                     reddit: None,
+                    github: None,
                     spotify: None,
                     widgets: Vec::new(),
                     widget_counter: 0,

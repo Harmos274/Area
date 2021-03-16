@@ -1,4 +1,4 @@
-use actix_web::{dev::HttpServiceFactory, get, post, web};
+use actix_web::{dev::HttpServiceFactory, get, put, web};
 use actix_web_httpauth::extractors::bearer::BearerAuth;
 use serde::{Deserialize, Serialize};
 
@@ -32,7 +32,7 @@ where
     }
 }
 
-#[post("/link")]
+#[put("/link")]
 async fn link(
     data: web::Data<AppData>,
     auth: BearerAuth,
@@ -47,7 +47,7 @@ async fn link(
     })
 }
 
-#[post("/unlink")]
+#[put("/unlink")]
 async fn unlink(data: web::Data<AppData>, auth: BearerAuth) -> Response<()> {
     data.map_to_user_mut(auth.token(), |user| {
         user.reddit = None;

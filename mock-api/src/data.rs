@@ -44,6 +44,7 @@ pub struct User {
 
     pub reddit: Option<String>,
     pub spotify: Option<String>,
+    pub github: Option<String>,
 
     pub widgets: Vec<Widget>,
     pub widget_counter: usize,

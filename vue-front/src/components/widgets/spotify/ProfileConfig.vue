@@ -1,0 +1,24 @@
+<template>
+  <widget-creation-dialog
+    title="Profile Viewer"
+    description="This widget displays some information about your Spotify profile."
+    @done="$emit('done', name, {})"
+    :button-text="buttonText"
+  />
+</template>
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator'
+import WidgetConfigDialog from '@/components/base/WidgetConfigDialog.vue'
+import { WidgetName } from '@/widgets'
+
+@Component({
+  components: { WidgetCreationDialog: WidgetConfigDialog },
+})
+export default class ProfileConfig extends Vue {
+  readonly name: WidgetName = 'spotify_profile'
+
+  @Prop({ required: true })
+  buttonText!: string
+}
+</script>
