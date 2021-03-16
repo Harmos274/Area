@@ -21,8 +21,8 @@ create table if not exists users
 		constraint users_mail_key
 			unique,
 	password text not null,
-	twitter_id integer
-		constraint fk_twitter_service
+	github_id integer
+		constraint fk_github_service
 			references services
 				on update cascade on delete set null,
 	reddit_id integer
@@ -78,4 +78,10 @@ alter table widgets owner to "user";
 insert into widget_types(type, configurable)
 values ('reddit_profile', false),
        ('reddit_hots', true),
-       ('reddit_spotlights', false);
+       ('reddit_spotlights', false),
+       ('spotify_profile', false),
+       ('spotify_music', true),
+       ('spotify_podcast', true),
+       ('github_profile', false),
+       ('github_issues', false),
+       ('github_spotlights', false);

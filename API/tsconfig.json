@@ -16,6 +16,10 @@
     "auth/**/*",
     "reddit/**/*",
     "common/**/*",
+    "widget/**/*",
+    "spotify/**/*",
+    "github/**/*",
+    "about/**/*"
   ],
 
   "exclude": [

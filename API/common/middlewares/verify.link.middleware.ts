@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import ErrorModel from '../../common/models/error.model'
+import ErrorModel from '../models/error.model'
 import TokenLinkRequestModel from '../models/token.link.request.model'
 
 type LinkRequestModel = Request<unknown, unknown, TokenLinkRequestModel>
