@@ -14,14 +14,6 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-// Add api endpoint
-AuthenticationRouter(app)
-RedditRouter(app)
-SpotifyRouter(app)
-GithubRouter(app)
-WidgetRouter(app)
-AboutRouter(app)
-
 // Cors config
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
@@ -46,3 +38,11 @@ orm.authenticate()
 app.listen(Config.port, function () {
     console.log(`API listening at port ${Config.port}`)
 })
+
+// Add api endpoint
+AuthenticationRouter(app)
+RedditRouter(app)
+SpotifyRouter(app)
+GithubRouter(app)
+WidgetRouter(app)
+AboutRouter(app)

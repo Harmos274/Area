@@ -12,7 +12,7 @@ pub fn service() -> impl HttpServiceFactory {
 
 #[derive(Deserialize)]
 struct RegisterData {
-    email: String,
+    mail: String,
     username: String,
     password: String,
 }
@@ -20,7 +20,7 @@ struct RegisterData {
 #[post("/register")]
 async fn register(data: web::Data<AppData>, request: web::Json<RegisterData>) -> Response<()> {
     let RegisterData {
-        email,
+        mail,
         username,
         password,
     } = request.0;
@@ -29,13 +29,13 @@ async fn register(data: web::Data<AppData>, request: web::Json<RegisterData>) ->
         Err(_) => Response::internal_error("Lock failed".to_string()),
         Ok(mut users) => match users
             .iter()
-            .find(|user| user.email == email || user.username == username)
+            .find(|user| user.mail == mail || user.username == username)
             .is_some()
         {
             true => Response::conflict("User already exists".to_string()),
             false => {
                 users.push(User {
-                    email,
+                    mail,
                     username,
                     password,
                     reddit: None,
@@ -53,7 +53,7 @@ async fn register(data: web::Data<AppData>, request: web::Json<RegisterData>) ->
 #[derive(Deserialize)]
 struct LoginData {
     grant_type: String,
-    email: String,
+    username: String,
     password: String,
 }
 
@@ -61,7 +61,7 @@ struct LoginData {
 async fn token(data: web::Data<AppData>, request: web::Form<LoginData>) -> Response<Token> {
     let LoginData {
         grant_type,
-        email,
+        username,
         password,
     } = request.0;
 
@@ -73,7 +73,7 @@ async fn token(data: web::Data<AppData>, request: web::Form<LoginData>) -> Respo
         Err(_) => Response::internal_error("Lock failed".to_string()),
         Ok(users) => match users
             .iter()
-            .find(|user| user.email == email && user.password == password)
+            .find(|user| user.mail == username && user.password == password)
         {
             Some(user) => Response::created(Token {
                 access_token: user.username.clone(),

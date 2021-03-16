@@ -38,7 +38,7 @@ impl AppData {
 }
 
 pub struct User {
-    pub email: String,
+    pub mail: String,
     pub username: String,
     pub password: String,
 
