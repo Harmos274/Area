@@ -18,7 +18,7 @@ Reddit can show your *profile* info, *spotlights* subreddit and the best post of
 #### Spotify
 Spotify can show your *profile* info, a *podcast* player and a *playlist* .
 
-### GitHub
+#### GitHub
 GitHub can show your *profile* info, your *issues* and the most popular repositories at the moment.
 
 ### Cross-platform
