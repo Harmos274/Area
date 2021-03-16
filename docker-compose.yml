@@ -14,14 +14,27 @@ services:
 
     api:
         build: API
+        depends_on:
+            - db
         ports:
-            - 5000:80
+            - 80:5000
         restart: on-failure
         environment:
             - DB_USER
             - DB_PASSWORD
             - DB_HOST
             - DB_PORT
+            - AREA_VERSION
+            - REDDIT_CLIENT_ID
+            - REDDIT_CLIENT_SECRET
+            - REDDIT_REDIRECT_URI
+            - SPOTIFY_CLIENT_ID
+            - SPOTIFY_CLIENT_SECRET
+            - SPOTIFY_REDIRECT_URI
+            - GITHUB_CLIENT_ID
+            - GITHUB_CLIENT_SECRET
+            - GITHUB_REDIRECT_URI
+            - GITHUB_STATE
         networks:
             - db-network
         profiles: ["api", "production"]

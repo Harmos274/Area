@@ -78,12 +78,13 @@ function getTokenConfig (): AxiosRequestConfig {
   }
 }
 
-export async function register (email: string,
+export async function register (mail: string,
   username: string,
   password: string): Promise<RegistrationState> {
-  return axios.post('/oauth/register', { email, username, password })
+  return axios.post('/oauth/register', { mail, username, password })
     .then(() => RegistrationState.Success)
     .catch(error => {
+      console.log(error)
       if (error.status === 409) return RegistrationState.UserAlreadyExists
       else return RegistrationState.Error
     })
@@ -96,14 +97,16 @@ export async function login (email: string, password: string):
   const body = new URLSearchParams()
 
   body.append('grant_type', 'password')
-  body.append('email', email)
+  body.append('username', email)
   body.append('password', password)
 
   return axios.post('/oauth/token', body, getTokenConfig())
     .then(response => {
+      console.log(response.data)
       store.commit('setAreaState', {
         reddit: 'LoggedOut',
         spotify: 'LoggedOut',
+        github: 'LoggedOut',
 
         widgets: [],
 
@@ -285,6 +288,7 @@ export function addWidget (type_name: WidgetName, config: WidgetConfig): void {
 
 export function getWidgets (): void {
   const config = getAuthConfig()
+  console.log(config)
 
   if (config) {
     axios.get('/widget/list', config)
