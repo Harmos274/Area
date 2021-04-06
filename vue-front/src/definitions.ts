@@ -5,7 +5,7 @@ function getBaseApiUrl (): string {
   if (host && port) {
     return `http://${host}:${port}`
   } else {
-    return 'http://localhost:80'
+    return 'http://localhost:5000'
   }
 }
 

@@ -28,6 +28,14 @@ app.use((req, res, next) => {
     }
 })
 
+// Add api endpoint
+AuthenticationRouter(app)
+RedditRouter(app)
+SpotifyRouter(app)
+GithubRouter(app)
+WidgetRouter(app)
+AboutRouter(app)
+
 orm.authenticate()
     .then(() => {
         console.log('connected to orm')
@@ -38,11 +46,3 @@ orm.authenticate()
 app.listen(Config.port, function () {
     console.log(`API listening at port ${Config.port}`)
 })
-
-// Add api endpoint
-AuthenticationRouter(app)
-RedditRouter(app)
-SpotifyRouter(app)
-GithubRouter(app)
-WidgetRouter(app)
-AboutRouter(app)

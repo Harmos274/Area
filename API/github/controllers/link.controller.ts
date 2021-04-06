@@ -11,7 +11,7 @@ import GithubService from '../services/github.service'
 export async function link(req: Request<unknown, unknown, TokenLinkRequestModel>, res: Response<BaseModel, Record<string, Token>>): Promise<void> {
     try {
         const user = res.locals.oauth.user as User
-        const service = await GithubService.fromAccessCode(req.body.access_code)
+        const service = await GithubService.fromAccessCode(req.body.code)
 
         await DatabaseService.saveServiceAccessToken('github', user, service.access_token, null, null)
         res.status(200).send(new LinkResponseModel())

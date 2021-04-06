@@ -11,7 +11,7 @@ import SpotifyService from '../service/spotify.service'
 export async function link(req: Request<unknown, unknown, TokenLinkRequestModel>, res: Response<BaseModel, Record<string, Token>>): Promise<void> {
     try {
         const user = res.locals.oauth.user as User
-        const service = await SpotifyService.fromAccessCode(req.body.access_code)
+        const service = await SpotifyService.fromAccessCode(req.body.code)
 
         await DatabaseService.saveServiceAccessToken('spotify', user, service.access_token, service.refresh_token, service.expire_date)
         res.status(200).send(new LinkResponseModel())
